@@ -1,0 +1,18 @@
+language: node_js
+
+os:
+  - linux
+  - osx
+
+cache: npm
+
+addons:
+  chrome: stable
+  firefox: latest
+
+script:
+  - npm run build
+  - npm run test
+  - npm run test:chrome
+  - npm run test:firefox
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run test:safari; fi
