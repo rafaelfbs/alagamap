@@ -11,6 +11,8 @@
     "lint": "eslint \"./**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "aws-amplify": "^1.1.24",
+    "aws-amplify-react": "^2.3.4",
     "core-js": "^3.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
@@ -24,14 +26,15 @@
     "@babel/preset-typescript": "7.3.3",
     "@babel/register": "^7.4.0",
     "@hot-loader/react-dom": "^16.8.6",
+    "@tech-wizards/favicons-webpack-plugin": "^0.1.0",
     "@types/react": "16.3.13",
     "@types/react-dom": "^16.8.3",
     "@types/webpack": "^4.4.27",
     "@types/webpack-dev-server": "^3.1.5",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "@typescript-eslint/parser": "^1.6.0",
-    "app-manifest-webpack-plugin": "^1.2.0",
     "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
@@ -41,6 +44,7 @@
     "jest": "^24.7.1",
     "prettier": "^1.16.4",
     "react-hot-loader": "^4.8.3",
+    "style-loader": "^0.23.1",
     "testcafe": "^1.1.1",
     "typescript": "^3.4.2",
     "webpack": "^4.29.6",

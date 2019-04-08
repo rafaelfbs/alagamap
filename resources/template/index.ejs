@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="<%= htmlWebpackPlugin.options.lang %>" dir="<%= htmlWebpackPlugin.options.dir %>"<% if (htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>>
+  <head>
+    <meta charset="utf-8">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <style>.unsupported-browser { display: none; }</style>
+    <div class="unsupported-browser">
+      Desculpe, seu browser não é suportado. Por favor atualize para a última versão ou mude seu browser para utilizar este site.
+      Acesse <a href="http://outdatedbrowser.com/">outdatedbrowser.com</a> para conhecer mais opções.
+    </div>
+    <noscript>
+      <div class="awesome-fancy-styling">
+        Este site requer javascript. Por favor, habilite-o para continuar utilizando este site.
+      </div>
+    </noscript>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+    "AppSyncApiName": "alagamap",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authcognito06e8f111",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

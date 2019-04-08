@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as path from "path";
 import * as webpack from "webpack";
 import HTMLWebpackPlugin from "html-webpack-plugin";
 import HTMLWebpackRootPlugin from "html-webpack-root-plugin";
-import AppManifestWebpackPlugin from "app-manifest-webpack-plugin";
+import FaviconsWebpackPlugin from "@tech-wizards/favicons-webpack-plugin";
 import { GenerateSW } from "workbox-webpack-plugin";
 
 export default <webpack.Configuration>{
@@ -15,19 +16,21 @@ export default <webpack.Configuration>{
   },
   plugins: [
     new HTMLWebpackPlugin({
+      lang: "pt-br",
+      dir: "ltr",
       meta: {
         viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
       },
+      template: path.resolve("./resources/template/index.ejs"),
     }),
-    new AppManifestWebpackPlugin({
-      logo: path.join(__dirname, "..", "..", "resources", "icons", "water.png"),
-      statsFilename: "iconstats.json",
-      output: "./",
-    }),
+    new FaviconsWebpackPlugin(path.resolve("./resources/icons/water.png")),
     new HTMLWebpackRootPlugin(),
     new GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
+      cacheId: "AlagaMAP",
+      navigateFallback: "index.html",
+      exclude: [/\.map$/, /^manifest.*\.js(?:on)?$/],
     }),
   ],
   module: {
@@ -39,6 +42,10 @@ export default <webpack.Configuration>{
         options: {
           cacheDirectory: true,
         },
+      },
+      {
+        test: /\.css$/,
+        loaders: ["style-loader", "css-loader"],
       },
     ],
   },

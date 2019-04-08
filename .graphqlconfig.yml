@@ -1,0 +1,16 @@
+projects:
+  alagamap:
+    schemaPath: src\graphql\schema.json
+    includes:
+      - src\graphql\**\*.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: src\API.ts
+        docsFilePath: src\graphql
+        graphQLApiId: wnqw7aroo5dqbnfayrslvv2cxq
+      endpoints:
+        prod: >-
+          https://uyni5dni6fhb5fbk7blzangwpy.appsync-api.us-east-1.amazonaws.com/graphql

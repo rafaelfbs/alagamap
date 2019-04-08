@@ -1,0 +1,18 @@
+
+# Representa uma geo posição
+type GeoPosition
+{
+  latitude: Float!
+  longitude: Float!
+}
+
+# Representa um marcador no mapa
+type Marker
+  @model
+  @auth(rules: [
+    {allow: owner}
+  ])
+{
+  id: ID!
+  geoPosition: GeoPosition!
+}
