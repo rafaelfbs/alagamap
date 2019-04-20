@@ -4,7 +4,7 @@ import * as webpack from "webpack";
 import HTMLWebpackPlugin from "html-webpack-plugin";
 import HTMLWebpackRootPlugin from "html-webpack-root-plugin";
 import FaviconsWebpackPlugin from "@tech-wizards/favicons-webpack-plugin";
-import { GenerateSW } from "workbox-webpack-plugin";
+import jimpAdapter from "./loaders/responsive-loader/jimp-adapter";
 
 export default <webpack.Configuration>{
   mode: "development",
@@ -15,6 +15,9 @@ export default <webpack.Configuration>{
     extensions: [".tsx", ".ts", ".jsx", ".mjs", ".js", ".json"],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env.USE_SERVICE_WORKER": "false",
+    }),
     new HTMLWebpackPlugin({
       lang: "pt-br",
       dir: "ltr",
@@ -25,13 +28,13 @@ export default <webpack.Configuration>{
     }),
     new FaviconsWebpackPlugin(path.resolve("./resources/icons/water.png")),
     new HTMLWebpackRootPlugin(),
-    new GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-      cacheId: "AlagaMAP",
-      navigateFallback: "index.html",
-      exclude: [/\.map$/, /^manifest.*\.js(?:on)?$/],
-    }),
+    // new GenerateSW({
+    //   clientsClaim: true,
+    //   skipWaiting: true,
+    //   cacheId: "AlagaMAP",
+    //   navigateFallback: "index.html",
+    //   exclude: [/\.map$/, /^manifest.*\.js(?:on)?$/],
+    // }),
   ],
   module: {
     rules: [
@@ -47,6 +50,18 @@ export default <webpack.Configuration>{
         test: /\.css$/,
         loaders: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(woff2|woff|eot|ttf|svg)$/,
+        loaders: ["file-loader"],
+      },
+      {
+        test: /\.png$/,
+        resourceQuery: /jimp/,
+        loader: "responsive-loader",
+        options: {
+          adapter: jimpAdapter,
+        },
+      },
     ],
   },
   devServer: {
@@ -55,6 +70,7 @@ export default <webpack.Configuration>{
       passphrase: "YourPassword",
     },
     hot: true,
+    host: "0.0.0.0",
     port: 443,
     historyApiFallback: true,
     overlay: true,

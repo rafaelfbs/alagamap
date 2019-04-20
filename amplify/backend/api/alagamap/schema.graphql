@@ -1,18 +1,40 @@
 
-# Representa uma geo posição
-type GeoPosition
+type Location
 {
-  latitude: Float!
-  longitude: Float!
+  lat: Float!
+  lon: Float!
 }
 
-# Representa um marcador no mapa
-type Marker
+input LocationInput
+{
+  lat: Float!
+  lon: Float!
+}
+
+enum IncidentType
+{
+  FLOOD
+}
+
+type Incident
   @model
+  @searchable
   @auth(rules: [
     {allow: owner}
   ])
 {
   id: ID!
-  geoPosition: GeoPosition!
+  location: Location!
+  incidentType: IncidentType!
+}
+
+type IncidentConnection {
+  items: [Incident]
+  total: Int
+  nextToken: String
+}
+
+type Query
+{
+  nearbyIncidents(location: LocationInput!, km: Int): IncidentConnection
 }

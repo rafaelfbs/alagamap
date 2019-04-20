@@ -1,2 +1,2 @@
 src/aws-exports.js
-src/API.ts
+src/api/api.ts

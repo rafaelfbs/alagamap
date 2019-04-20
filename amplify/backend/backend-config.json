@@ -1,6 +1,6 @@
 {
 	"auth": {
-		"cognito06e8f111": {
+		"cognito6170dcc7": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation"
 		}
@@ -13,5 +13,6 @@
 				"securityType": "AMAZON_COGNITO_USER_POOLS"
 			}
 		}
-	}
+	},
+	"hosting": {}
 }

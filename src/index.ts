@@ -1,30 +1,14 @@
-import Amplify from "aws-amplify";
-import { withAuthenticator } from "aws-amplify-react";
+import "typeface-roboto";
+import "material-icons";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { hot } from "react-hot-loader/root";
 
 import { RootComponent } from "./RootComponent";
 
-import awsmobile from "./aws-exports";
+import "./register-sw";
 
-Amplify.configure(awsmobile);
+const rootElement = React.createElement(RootComponent);
+const container = document.getElementById("root");
 
-ReactDOM.render(
-  React.createElement(hot(withAuthenticator(RootComponent, true)) as React.ReactType),
-  document.getElementById("root"),
-);
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then(registration => {
-        console.log("SW registered:", registration);
-      })
-      .catch(registrationError => {
-        console.log("SW registration failed:", registrationError);
-      });
-  });
-}
+ReactDOM.render(rootElement, container);

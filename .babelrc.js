@@ -3,7 +3,11 @@ function isBabelRegister(caller) {
 }
 
 module.exports = api => {
-  const plugins = ["@babel/plugin-syntax-dynamic-import"];
+  const plugins = [
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-transform-runtime",
+  ];
+
   const presetEnv = ["@babel/preset-env"];
   const isRegister = api.caller(isBabelRegister);
 
