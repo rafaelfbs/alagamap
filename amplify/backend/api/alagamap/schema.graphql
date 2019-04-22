@@ -26,6 +26,20 @@ type Incident
   id: ID!
   location: Location!
   incidentType: IncidentType!
+  incidentStatuses: [IncidentStatus] @connection(name: "IncidentStatuses")
+}
+
+enum IncidentStatusType {
+  APPROVE
+  DISAPPROVE
+}
+
+type IncidentStatus
+  @model
+{
+  id: ID!
+  statusType: IncidentStatusType!
+  incident: Incident! @connection(name: "IncidentStatuses")
 }
 
 type IncidentConnection {

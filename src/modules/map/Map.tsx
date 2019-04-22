@@ -71,6 +71,7 @@ const Map = ({
       {nearbyIncidents.map(item => (
         <WaterMarker
           key={item.id}
+          incident={item}
           position={toPos(item.location)}
           reporter="Desconhecido"
           isSelected={selectedMarker === item.id}

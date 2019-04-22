@@ -9,6 +9,17 @@ export const onCreateIncident = `subscription OnCreateIncident {
       lon
     }
     incidentType
+    incidentStatuses {
+      items {
+        id
+        statusType
+        incident {
+          id
+          incidentType
+        }
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -20,6 +31,17 @@ export const onUpdateIncident = `subscription OnUpdateIncident {
       lon
     }
     incidentType
+    incidentStatuses {
+      items {
+        id
+        statusType
+        incident {
+          id
+          incidentType
+        }
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -31,6 +53,83 @@ export const onDeleteIncident = `subscription OnDeleteIncident {
       lon
     }
     incidentType
+    incidentStatuses {
+      items {
+        id
+        statusType
+        incident {
+          id
+          incidentType
+        }
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onCreateIncidentStatus = `subscription OnCreateIncidentStatus {
+  onCreateIncidentStatus {
+    id
+    statusType
+    incident {
+      id
+      location {
+        lat
+        lon
+      }
+      incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const onUpdateIncidentStatus = `subscription OnUpdateIncidentStatus {
+  onUpdateIncidentStatus {
+    id
+    statusType
+    incident {
+      id
+      location {
+        lat
+        lon
+      }
+      incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const onDeleteIncidentStatus = `subscription OnDeleteIncidentStatus {
+  onDeleteIncidentStatus {
+    id
+    statusType
+    incident {
+      id
+      location {
+        lat
+        lon
+      }
+      incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
   }
 }
 `;

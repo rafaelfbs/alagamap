@@ -4,6 +4,7 @@ import { WaterInfoWindow } from "./window/WaterInfoWindow";
 
 // @ts-ignore
 import image from "../../../../resources/icons/water.png?jimp&size=20&rotate=180";
+import { Incident } from "../../shared/types";
 
 interface GeoPosition {
   lat: number;
@@ -12,17 +13,25 @@ interface GeoPosition {
 
 interface WaterMarkerProps {
   position: GeoPosition;
+  incident?: Incident;
   reporter: string;
   isSelected: boolean;
   onSelect?: () => void;
   onClose?: () => void;
 }
 
-const WaterMarker = ({ position, reporter, isSelected, onSelect, onClose }: WaterMarkerProps) => (
+const WaterMarker = ({
+  position,
+  incident,
+  reporter,
+  isSelected,
+  onSelect,
+  onClose,
+}: WaterMarkerProps) => (
   <Marker position={position} icon={image.src} onClick={onSelect}>
-    {isSelected && (
+    {isSelected && !!incident && (
       <InfoWindow onCloseClick={onClose}>
-        <WaterInfoWindow reporter={reporter} />
+        <WaterInfoWindow incident={incident} reporter={reporter} />
       </InfoWindow>
     )}
   </Marker>

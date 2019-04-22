@@ -9,6 +9,17 @@ export const createIncident = `mutation CreateIncident($input: CreateIncidentInp
       lon
     }
     incidentType
+    incidentStatuses {
+      items {
+        id
+        statusType
+        incident {
+          id
+          incidentType
+        }
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -20,6 +31,17 @@ export const updateIncident = `mutation UpdateIncident($input: UpdateIncidentInp
       lon
     }
     incidentType
+    incidentStatuses {
+      items {
+        id
+        statusType
+        incident {
+          id
+          incidentType
+        }
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -31,6 +53,83 @@ export const deleteIncident = `mutation DeleteIncident($input: DeleteIncidentInp
       lon
     }
     incidentType
+    incidentStatuses {
+      items {
+        id
+        statusType
+        incident {
+          id
+          incidentType
+        }
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const createIncidentStatus = `mutation CreateIncidentStatus($input: CreateIncidentStatusInput!) {
+  createIncidentStatus(input: $input) {
+    id
+    statusType
+    incident {
+      id
+      location {
+        lat
+        lon
+      }
+      incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const updateIncidentStatus = `mutation UpdateIncidentStatus($input: UpdateIncidentStatusInput!) {
+  updateIncidentStatus(input: $input) {
+    id
+    statusType
+    incident {
+      id
+      location {
+        lat
+        lon
+      }
+      incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const deleteIncidentStatus = `mutation DeleteIncidentStatus($input: DeleteIncidentStatusInput!) {
+  deleteIncidentStatus(input: $input) {
+    id
+    statusType
+    incident {
+      id
+      location {
+        lat
+        lon
+      }
+      incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
   }
 }
 `;

@@ -10,6 +10,13 @@ export const nearbyIncidents = `query NearbyIncidents($location: LocationInput!,
         lon
       }
       incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
     }
     total
     nextToken
@@ -24,6 +31,17 @@ export const getIncident = `query GetIncident($id: ID!) {
       lon
     }
     incidentType
+    incidentStatuses {
+      items {
+        id
+        statusType
+        incident {
+          id
+          incidentType
+        }
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -40,6 +58,60 @@ export const listIncidents = `query ListIncidents(
         lon
       }
       incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
+    nextToken
+  }
+}
+`;
+export const getIncidentStatus = `query GetIncidentStatus($id: ID!) {
+  getIncidentStatus(id: $id) {
+    id
+    statusType
+    incident {
+      id
+      location {
+        lat
+        lon
+      }
+      incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const listIncidentStatuss = `query ListIncidentStatuss(
+  $filter: ModelIncidentStatusFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listIncidentStatuss(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      statusType
+      incident {
+        id
+        location {
+          lat
+          lon
+        }
+        incidentType
+        incidentStatuses {
+          nextToken
+        }
+      }
     }
     nextToken
   }
@@ -64,6 +136,13 @@ export const searchIncidents = `query SearchIncidents(
         lon
       }
       incidentType
+      incidentStatuses {
+        items {
+          id
+          statusType
+        }
+        nextToken
+      }
     }
     nextToken
   }

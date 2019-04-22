@@ -17,6 +17,12 @@ export enum IncidentType {
 }
 
 
+export enum IncidentStatusType {
+  APPROVE = "APPROVE",
+  DISAPPROVE = "DISAPPROVE",
+}
+
+
 export type UpdateIncidentInput = {
   id: string,
   location?: LocationInput | null,
@@ -24,6 +30,22 @@ export type UpdateIncidentInput = {
 };
 
 export type DeleteIncidentInput = {
+  id?: string | null,
+};
+
+export type CreateIncidentStatusInput = {
+  id?: string | null,
+  statusType: IncidentStatusType,
+  incidentStatusIncidentId: string,
+};
+
+export type UpdateIncidentStatusInput = {
+  id: string,
+  statusType?: IncidentStatusType | null,
+  incidentStatusIncidentId?: string | null,
+};
+
+export type DeleteIncidentStatusInput = {
   id?: string | null,
 };
 
@@ -51,6 +73,19 @@ export type ModelIDFilterInput = {
 export type ModelIncidentTypeFilterInput = {
   eq?: IncidentType | null,
   ne?: IncidentType | null,
+};
+
+export type ModelIncidentStatusFilterInput = {
+  id?: ModelIDFilterInput | null,
+  statusType?: ModelIncidentStatusTypeFilterInput | null,
+  and?: Array< ModelIncidentStatusFilterInput | null > | null,
+  or?: Array< ModelIncidentStatusFilterInput | null > | null,
+  not?: ModelIncidentStatusFilterInput | null,
+};
+
+export type ModelIncidentStatusTypeFilterInput = {
+  eq?: IncidentStatusType | null,
+  ne?: IncidentStatusType | null,
 };
 
 export type SearchableIncidentFilterInput = {
@@ -102,6 +137,20 @@ export type CreateIncidentMutation = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentStatuses:  {
+      __typename: "ModelIncidentStatusConnection",
+      items:  Array< {
+        __typename: "IncidentStatus",
+        id: string,
+        statusType: IncidentStatusType,
+        incident:  {
+          __typename: "Incident",
+          id: string,
+          incidentType: IncidentType,
+        },
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -119,6 +168,20 @@ export type UpdateIncidentMutation = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentStatuses:  {
+      __typename: "ModelIncidentStatusConnection",
+      items:  Array< {
+        __typename: "IncidentStatus",
+        id: string,
+        statusType: IncidentStatusType,
+        incident:  {
+          __typename: "Incident",
+          id: string,
+          incidentType: IncidentType,
+        },
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -136,6 +199,113 @@ export type DeleteIncidentMutation = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentStatuses:  {
+      __typename: "ModelIncidentStatusConnection",
+      items:  Array< {
+        __typename: "IncidentStatus",
+        id: string,
+        statusType: IncidentStatusType,
+        incident:  {
+          __typename: "Incident",
+          id: string,
+          incidentType: IncidentType,
+        },
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type CreateIncidentStatusMutationVariables = {
+  input: CreateIncidentStatusInput,
+};
+
+export type CreateIncidentStatusMutation = {
+  createIncidentStatus:  {
+    __typename: "IncidentStatus",
+    id: string,
+    statusType: IncidentStatusType,
+    incident:  {
+      __typename: "Incident",
+      id: string,
+      location:  {
+        __typename: "Location",
+        lat: number,
+        lon: number,
+      },
+      incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type UpdateIncidentStatusMutationVariables = {
+  input: UpdateIncidentStatusInput,
+};
+
+export type UpdateIncidentStatusMutation = {
+  updateIncidentStatus:  {
+    __typename: "IncidentStatus",
+    id: string,
+    statusType: IncidentStatusType,
+    incident:  {
+      __typename: "Incident",
+      id: string,
+      location:  {
+        __typename: "Location",
+        lat: number,
+        lon: number,
+      },
+      incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type DeleteIncidentStatusMutationVariables = {
+  input: DeleteIncidentStatusInput,
+};
+
+export type DeleteIncidentStatusMutation = {
+  deleteIncidentStatus:  {
+    __typename: "IncidentStatus",
+    id: string,
+    statusType: IncidentStatusType,
+    incident:  {
+      __typename: "Incident",
+      id: string,
+      location:  {
+        __typename: "Location",
+        lat: number,
+        lon: number,
+      },
+      incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    },
   } | null,
 };
 
@@ -156,6 +326,15 @@ export type NearbyIncidentsQuery = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
     } | null > | null,
     total: number | null,
     nextToken: string | null,
@@ -176,6 +355,20 @@ export type GetIncidentQuery = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentStatuses:  {
+      __typename: "ModelIncidentStatusConnection",
+      items:  Array< {
+        __typename: "IncidentStatus",
+        id: string,
+        statusType: IncidentStatusType,
+        incident:  {
+          __typename: "Incident",
+          id: string,
+          incidentType: IncidentType,
+        },
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -197,6 +390,78 @@ export type ListIncidentsQuery = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type GetIncidentStatusQueryVariables = {
+  id: string,
+};
+
+export type GetIncidentStatusQuery = {
+  getIncidentStatus:  {
+    __typename: "IncidentStatus",
+    id: string,
+    statusType: IncidentStatusType,
+    incident:  {
+      __typename: "Incident",
+      id: string,
+      location:  {
+        __typename: "Location",
+        lat: number,
+        lon: number,
+      },
+      incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type ListIncidentStatussQueryVariables = {
+  filter?: ModelIncidentStatusFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListIncidentStatussQuery = {
+  listIncidentStatuss:  {
+    __typename: "ModelIncidentStatusConnection",
+    items:  Array< {
+      __typename: "IncidentStatus",
+      id: string,
+      statusType: IncidentStatusType,
+      incident:  {
+        __typename: "Incident",
+        id: string,
+        location:  {
+          __typename: "Location",
+          lat: number,
+          lon: number,
+        },
+        incidentType: IncidentType,
+        incidentStatuses:  {
+          __typename: "ModelIncidentStatusConnection",
+          nextToken: string | null,
+        } | null,
+      },
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -221,6 +486,15 @@ export type SearchIncidentsQuery = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -236,6 +510,20 @@ export type OnCreateIncidentSubscription = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentStatuses:  {
+      __typename: "ModelIncidentStatusConnection",
+      items:  Array< {
+        __typename: "IncidentStatus",
+        id: string,
+        statusType: IncidentStatusType,
+        incident:  {
+          __typename: "Incident",
+          id: string,
+          incidentType: IncidentType,
+        },
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -249,6 +537,20 @@ export type OnUpdateIncidentSubscription = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentStatuses:  {
+      __typename: "ModelIncidentStatusConnection",
+      items:  Array< {
+        __typename: "IncidentStatus",
+        id: string,
+        statusType: IncidentStatusType,
+        incident:  {
+          __typename: "Incident",
+          id: string,
+          incidentType: IncidentType,
+        },
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -262,5 +564,100 @@ export type OnDeleteIncidentSubscription = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentStatuses:  {
+      __typename: "ModelIncidentStatusConnection",
+      items:  Array< {
+        __typename: "IncidentStatus",
+        id: string,
+        statusType: IncidentStatusType,
+        incident:  {
+          __typename: "Incident",
+          id: string,
+          incidentType: IncidentType,
+        },
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnCreateIncidentStatusSubscription = {
+  onCreateIncidentStatus:  {
+    __typename: "IncidentStatus",
+    id: string,
+    statusType: IncidentStatusType,
+    incident:  {
+      __typename: "Incident",
+      id: string,
+      location:  {
+        __typename: "Location",
+        lat: number,
+        lon: number,
+      },
+      incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type OnUpdateIncidentStatusSubscription = {
+  onUpdateIncidentStatus:  {
+    __typename: "IncidentStatus",
+    id: string,
+    statusType: IncidentStatusType,
+    incident:  {
+      __typename: "Incident",
+      id: string,
+      location:  {
+        __typename: "Location",
+        lat: number,
+        lon: number,
+      },
+      incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type OnDeleteIncidentStatusSubscription = {
+  onDeleteIncidentStatus:  {
+    __typename: "IncidentStatus",
+    id: string,
+    statusType: IncidentStatusType,
+    incident:  {
+      __typename: "Incident",
+      id: string,
+      location:  {
+        __typename: "Location",
+        lat: number,
+        lon: number,
+      },
+      incidentType: IncidentType,
+      incidentStatuses:  {
+        __typename: "ModelIncidentStatusConnection",
+        items:  Array< {
+          __typename: "IncidentStatus",
+          id: string,
+          statusType: IncidentStatusType,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
+    },
   } | null,
 };
