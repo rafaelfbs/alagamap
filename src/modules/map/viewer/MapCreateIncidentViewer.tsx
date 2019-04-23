@@ -34,7 +34,6 @@ const MapCreateIncidentViewerBase = ({
       <WaterMarker
         animation={google.maps.Animation.DROP}
         position={currentPosition}
-        reporter="Desconhecido"
         isSelected={false}
       />
     </React.Fragment>

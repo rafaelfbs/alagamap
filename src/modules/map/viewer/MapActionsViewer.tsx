@@ -1,7 +1,7 @@
 import { createStyles, withStyles, WithStyles } from "@material-ui/core/styles";
 import * as React from "react";
-import { CreateIncidentButton } from "./actions/CreateIncidentButton";
-import { ResetPositionButton } from "./actions/ResetPositionButton";
+import { CreateIncidentButton } from "../actions/CreateIncidentButton";
+import { ResetPositionButton } from "../actions/ResetPositionButton";
 
 const styles = createStyles({
   fabContainer: {
@@ -13,20 +13,20 @@ const styles = createStyles({
   },
 });
 
-export interface MapButtonsProps extends WithStyles<typeof styles> {
+export interface MapActionsViewerProps extends WithStyles<typeof styles> {
   creating: boolean;
   startCreation: () => void;
   finishCreation: () => void;
   resetPosition: () => void;
 }
 
-const MapButtonsBase = ({
+const MapActionsViewerBase = ({
   classes,
   creating,
   startCreation,
   finishCreation,
   resetPosition,
-}: MapButtonsProps) => (
+}: MapActionsViewerProps) => (
   <div className={classes.fabContainer}>
     <ResetPositionButton resetPosition={resetPosition} />
     <CreateIncidentButton
@@ -37,6 +37,6 @@ const MapButtonsBase = ({
   </div>
 );
 
-const MapButtons = withStyles(styles)(MapButtonsBase);
+const MapActionsViewer = withStyles(styles)(MapActionsViewerBase);
 
-export { MapButtons };
+export { MapActionsViewer };

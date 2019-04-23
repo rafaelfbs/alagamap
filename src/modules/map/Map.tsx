@@ -2,12 +2,33 @@ import * as React from "react";
 import { MutationFn } from "react-apollo";
 import { GoogleMap } from "react-google-maps";
 import { CreateIncidentInput, IncidentType } from "../../api";
-import { toLoc, toPos } from "../shared/converters";
+import { toLoc } from "../shared/converters";
 import { Incident } from "../shared/types";
-import { MapButtons } from "./MapActions";
-import { WaterMarker } from "./marker/WaterMarker";
-import { MapAddressSearch } from "./search/MapAddressSearch";
+import { MapActionsViewer } from "./viewer/MapActionsViewer";
+import { MapAddressSearchViewer } from "./viewer/MapAddressSearchViewer";
 import { MapCreateIncidentViewer } from "./viewer/MapCreateIncidentViewer";
+import { MapListIncidentMarkersViewer } from "./viewer/MapListIncidentMarkersViewer";
+
+const DEFAULT_MAP_OPTIONS = {
+  zoomControl: false,
+  mapTypeControl: false,
+  scaleControl: false,
+  streetViewControl: false,
+  rotateControl: false,
+  fullscreenControl: false,
+  gestureHandling: "greedy" as google.maps.GestureHandlingOptions,
+  styles: [
+    {
+      featureType: "poi" as google.maps.MapTypeStyleFeatureType,
+      elementType: "labels.icon" as google.maps.MapTypeStyleElementType,
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+  ],
+};
 
 export interface MapProps {
   devicePosition: google.maps.LatLngLiteral;
@@ -15,8 +36,6 @@ export interface MapProps {
   setCurrentPosition: (pos: google.maps.LatLngLiteral) => void;
   nearbyIncidents: Incident[];
   createIncident: MutationFn<Incident, { input: CreateIncidentInput }>;
-  selectedMarker: string;
-  setSelectedMarker: (id: string) => void;
 }
 
 const Map = ({
@@ -25,12 +44,10 @@ const Map = ({
   setCurrentPosition,
   nearbyIncidents,
   createIncident,
-  selectedMarker,
-  setSelectedMarker,
 }: MapProps) => {
   const mapRef = React.useRef<GoogleMap>(null);
   const [creating, setCreating] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [selectedMarker, setSelectedMarker] = React.useState(null);
 
   return (
     <GoogleMap
@@ -38,50 +55,18 @@ const Map = ({
       defaultZoom={15}
       defaultCenter={currentPosition}
       center={currentPosition}
-      defaultOptions={{
-        zoomControl: false,
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: false,
-        gestureHandling: "greedy",
-        styles: [
-          {
-            featureType: "poi",
-            elementType: "labels.icon",
-            stylers: [
-              {
-                visibility: "off",
-              },
-            ],
-          },
-        ],
-      }}
+      defaultOptions={DEFAULT_MAP_OPTIONS}
       onClick={(e: google.maps.IconMouseEvent) => (e.placeId ? setSelectedMarker(null) : null)}
       onCenterChanged={() => setCurrentPosition(mapRef.current.getCenter().toJSON())}
     >
-      <MapAddressSearch
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        setSelectedSearchLocation={(result: google.maps.GeocoderResult) => {
-          console.log(result);
-          setCurrentPosition(result.geometry.location.toJSON());
-        }}
+      <MapAddressSearchViewer setSelectedSearchLocation={setCurrentPosition} />
+      <MapListIncidentMarkersViewer
+        incidents={nearbyIncidents}
+        selectedMarker={selectedMarker}
+        setSelectedMarker={setSelectedMarker}
       />
-      {nearbyIncidents.map(item => (
-        <WaterMarker
-          key={item.id}
-          incident={item}
-          position={toPos(item.location)}
-          reporter="Desconhecido"
-          isSelected={selectedMarker === item.id}
-          onSelect={() => setSelectedMarker(item.id)}
-          onClose={() => setSelectedMarker(null)}
-        />
-      ))}
       <MapCreateIncidentViewer creating={creating} currentPosition={currentPosition} />
-      <MapButtons
+      <MapActionsViewer
         creating={creating}
         startCreation={() => setCreating(true)}
         finishCreation={async () => {

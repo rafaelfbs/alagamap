@@ -8,7 +8,7 @@ import {
 export interface MapAddressSearchProps {
   searchTerm: string;
   setSearchTerm: (searchTerm: string) => void;
-  setSelectedSearchLocation: (place: google.maps.GeocoderResult) => void;
+  setSelectedSearchLocation: (location: google.maps.LatLngLiteral) => void;
 }
 
 interface PlacesAutocompleteRenderProps {
@@ -47,7 +47,7 @@ const MapAddressSearch = ({
     onSelect={async (address: string, placeId: string) => {
       if (!placeId) return;
       const geocode = (await geocodeByPlaceId(placeId)) as google.maps.GeocoderResult[];
-      setSelectedSearchLocation(geocode[0]);
+      setSelectedSearchLocation(geocode[0].geometry.location.toJSON());
     }}
   >
     {renderAutocomplete}

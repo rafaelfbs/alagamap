@@ -5,7 +5,6 @@ import { DisapproveIncidentButton } from "../actions/DisapproveIncidentButton";
 
 export interface WaterInfoWindowProps {
   incident: Incident;
-  reporter: string;
 }
 
 const WaterInfoWindow = ({ incident }: WaterInfoWindowProps) => (
