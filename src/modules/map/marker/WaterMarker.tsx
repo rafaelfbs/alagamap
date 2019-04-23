@@ -3,7 +3,7 @@ import { Marker, InfoWindow } from "react-google-maps";
 import { WaterInfoWindow } from "./window/WaterInfoWindow";
 
 // @ts-ignore
-import image from "../../../../resources/icons/water.png?jimp&size=20&rotate=180";
+import image from "../../../../resources/icons/water-3.png?jimp&size=40&rotate=180";
 import { Incident } from "../../shared/types";
 
 interface GeoPosition {
@@ -14,6 +14,7 @@ interface GeoPosition {
 interface WaterMarkerProps {
   position: GeoPosition;
   incident?: Incident;
+  animation?: google.maps.Animation;
   reporter: string;
   isSelected: boolean;
   onSelect?: () => void;
@@ -24,11 +25,12 @@ const WaterMarker = ({
   position,
   incident,
   reporter,
+  animation,
   isSelected,
   onSelect,
   onClose,
 }: WaterMarkerProps) => (
-  <Marker position={position} icon={image.src} onClick={onSelect}>
+  <Marker position={position} icon={image.src} defaultAnimation={animation} onClick={onSelect}>
     {isSelected && !!incident && (
       <InfoWindow onCloseClick={onClose}>
         <WaterInfoWindow incident={incident} reporter={reporter} />

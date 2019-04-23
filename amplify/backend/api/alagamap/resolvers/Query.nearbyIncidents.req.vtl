@@ -3,6 +3,7 @@
 
 #set( $indexPath = "/incident/doc/_search" )
 #set( $distance = $util.defaultIfNull($ctx.args.km, 200) )
+#set( $limit = $util.defaultIfNull($ctx.args.limit, 1000) )
 {
   "version": "2017-02-28",
   "operation": "GET",
@@ -21,7 +22,8 @@
             }
           }
         }
-      }
+      },
+      "size": $limit
     }
   }
 }

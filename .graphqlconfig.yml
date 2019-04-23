@@ -1,6 +1,6 @@
 projects:
   alagamap:
-    schemaPath: src\api\graphql\schema.json
+    schemaPath: src\graphql\schema.json
     includes:
       - src\api\graphql\**\*.ts
     excludes:

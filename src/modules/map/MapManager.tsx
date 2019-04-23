@@ -30,11 +30,17 @@ const MapManager = () => {
   return (
     <Mutation
       mutation={CreateIncidentMutation}
-      refetchQueries={() => [{ query: MapQuery, variables: { location: toLoc(geo.position) } }]}
+      refetchQueries={() => [
+        { query: MapQuery, variables: { location: toLoc(geo.position), km: 5, limit: 1000 } },
+      ]}
       awaitRefetchQueries
     >
       {createIncident => (
-        <Query query={MapQuery} variables={{ location: toLoc(geo.position) }} pollInterval={10000}>
+        <Query
+          query={MapQuery}
+          variables={{ location: toLoc(geo.position), km: 5, limit: 1000 }}
+          pollInterval={10000}
+        >
           {({ data }) => (
             <MapComponent
               devicePosition={geo.position}

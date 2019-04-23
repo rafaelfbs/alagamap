@@ -7,6 +7,7 @@ import { Incident } from "../shared/types";
 import { MapButtons } from "./MapActions";
 import { WaterMarker } from "./marker/WaterMarker";
 import { MapAddressSearch } from "./search/MapAddressSearch";
+import { MapCreateIncidentViewer } from "./viewer/MapCreateIncidentViewer";
 
 export interface MapProps {
   devicePosition: google.maps.LatLngLiteral;
@@ -79,9 +80,7 @@ const Map = ({
           onClose={() => setSelectedMarker(null)}
         />
       ))}
-      {creating && (
-        <WaterMarker position={currentPosition} reporter="Desconhecido" isSelected={false} />
-      )}
+      <MapCreateIncidentViewer creating={creating} currentPosition={currentPosition} />
       <MapButtons
         creating={creating}
         startCreation={() => setCreating(true)}
