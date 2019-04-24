@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
+import HTMLWebpackPlugin from "html-webpack-plugin";
+import HTMLWebpackRootPlugin from "html-webpack-root-plugin";
 import * as path from "path";
 import * as webpack from "webpack";
 import { GenerateSW } from "workbox-webpack-plugin";
-import HTMLWebpackPlugin from "html-webpack-plugin";
-import HTMLWebpackRootPlugin from "html-webpack-root-plugin";
-import FaviconsWebpackPlugin from "@tech-wizards/favicons-webpack-plugin";
 import jimpAdapter from "./loaders/responsive-loader/jimp-adapter";
+import { ManifestPlugin } from "./plugins/manifest";
+import { OneSignalPlugin } from "./plugins/one-signal";
 
 export default <webpack.Configuration>{
   mode: "production",
@@ -24,7 +25,15 @@ export default <webpack.Configuration>{
       },
       template: path.resolve("./resources/template/index.ejs"),
     }),
-    new FaviconsWebpackPlugin(path.resolve("./resources/icons/water.png")),
+    new ManifestPlugin({
+      logo: path.resolve("./resources/icons/water.png"),
+      appName: "AlagaMAP",
+      appShortName: "AlagaMAP",
+      extraParameters: {
+        gcm_sender_id_comment: "For OneSignal Web Push Notifications, Do Not Change ID",
+        gcm_sender_id: "482941778795",
+      },
+    }),
     new HTMLWebpackRootPlugin(),
     new GenerateSW({
       clientsClaim: true,
@@ -32,6 +41,14 @@ export default <webpack.Configuration>{
       cacheId: "AlagaMAP",
       navigateFallback: "index.html",
       exclude: [/\.map$/, /^manifest.*\.js(?:on)?$/],
+    }),
+    new OneSignalPlugin({
+      appId: "27264849-3ec1-40d4-b82d-7de37f3f4819",
+      sdkFilePaths: [
+        path.resolve("./resources/scripts/OneSignalSDKUpdaterWorker.js"),
+        path.resolve("./resources/scripts/OneSignalSDKWorker.js"),
+      ],
+      injectManifest: false,
     }),
   ],
   module: {
