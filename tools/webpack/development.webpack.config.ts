@@ -37,7 +37,7 @@ export default <webpack.Configuration>{
       },
     }),
     new OneSignalPlugin({
-      appId: "27264849-3ec1-40d4-b82d-7de37f3f4819",
+      appId: "55ecee60-35e4-4be4-ac02-a2e8cd7edb2e",
       sdkFilePaths: [
         path.resolve("./resources/scripts/OneSignalSDKUpdaterWorker.js"),
         path.resolve("./resources/scripts/OneSignalSDKWorker.js"),
