@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import HTMLWebpackPlugin from "html-webpack-plugin";
-import HTMLWebpackRootPlugin from "html-webpack-root-plugin";
 import * as path from "path";
 import * as webpack from "webpack";
 import { GenerateSW } from "workbox-webpack-plugin";
@@ -34,14 +33,6 @@ export default <webpack.Configuration>{
         gcm_sender_id: "482941778795",
       },
     }),
-    new HTMLWebpackRootPlugin(),
-    new GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-      cacheId: "AlagaMAP",
-      navigateFallback: "index.html",
-      exclude: [/\.map$/, /^manifest.*\.js(?:on)?$/],
-    }),
     new OneSignalPlugin({
       appId: "27264849-3ec1-40d4-b82d-7de37f3f4819",
       sdkFilePaths: [
@@ -49,6 +40,13 @@ export default <webpack.Configuration>{
         path.resolve("./resources/scripts/OneSignalSDKWorker.js"),
       ],
       injectManifest: false,
+    }),
+    new GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      cacheId: "AlagaMAP",
+      navigateFallback: "index.html",
+      exclude: [/\.map$/, /(yandex-browser-)?manifest.*\.(js|json|webapp)?$/],
     }),
   ],
   module: {
