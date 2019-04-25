@@ -7,8 +7,13 @@ import { client, config } from "./api";
 import { MapManager } from "./modules/map/MapManager";
 import { hot } from "react-hot-loader/root";
 
-const App = ({ authState }: { authState?: string }) =>
-  authState === "signedIn" ? <MapManager /> : <span />;
+interface AppProps {
+  authState?: string;
+  authData?: { username: string };
+}
+
+const App = ({ authState, authData }: AppProps) =>
+  authState === "signedIn" ? <MapManager loggedInUser={authData.username} /> : <span />;
 
 const AuthenticatorTheme = {
   container: {

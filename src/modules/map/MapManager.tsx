@@ -8,6 +8,8 @@ import { toLoc } from "../shared/converters";
 import { nearbyIncidents } from "../../api/graphql/queries";
 import { createIncident } from "../../api/graphql/mutations";
 
+declare var OneSignal;
+
 const GOOGLE_MAPS_URL =
   "https://maps.googleapis.com/maps/api/js?key=AIzaSyCl2LdcNSsN2M8wycnuufBlTgi0nolsMNE&v=3.exp&libraries=geometry,drawing,places";
 
@@ -19,14 +21,28 @@ const CreateIncidentMutation = gql`
   ${createIncident}
 `;
 
-const MapManager = () => {
+const MapManager = ({ loggedInUser }: { loggedInUser: string }) => {
   const geo = useGeoLoc();
   const [currentPosition, setCurrentPosition] = React.useState(geo.position);
 
+  React.useEffect(() => {
+    if (geo.position) {
+      if (currentPosition === null) {
+        setCurrentPosition(geo.position);
+      }
+
+      OneSignal.push(function() {
+        OneSignal.sendTags({
+          user: loggedInUser,
+          latitude: geo.position.lat,
+          longitude: geo.position.lng,
+        });
+      });
+    }
+  }, [geo.position]);
+
   if (!geo.loaded || geo.error) {
     return <div>Loading...</div>;
-  } else if (currentPosition === null && geo.position) {
-    setCurrentPosition(geo.position);
   }
 
   const variables = { location: toLoc(geo.position), km: 5, limit: 1000 };

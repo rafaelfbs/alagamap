@@ -9,7 +9,8 @@
     "test:chrome": "testcafe chrome:headless test/acceptance/**/* --app \"http-server ./dist\"",
     "test:firefox": "testcafe firefox:headless test/acceptance/**/* --app \"http-server ./dist\"",
     "test:safari": "testcafe safari test/acceptance/**/* --app \"http-server ./dist\"",
-    "lint": "eslint \"./**/*.{js,jsx,ts,tsx}\""
+    "lint": "eslint \"./**/*.{js,jsx,ts,tsx}\"",
+    "amplify:ci:push": "node ./tools/amplify/push.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
@@ -35,6 +36,7 @@
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
+    "@aws-amplify/cli": "^1.6.4",
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",

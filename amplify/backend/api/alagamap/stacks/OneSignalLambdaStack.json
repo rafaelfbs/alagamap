@@ -1,0 +1,332 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "OneSignal lambda integration with dynamodb",
+  "Metadata": {},
+  "Parameters": {
+    "AppSyncApiId": {
+      "Type": "String",
+      "Description": "The id of the AppSync API associated with this project."
+    },
+    "AppSyncApiName": {
+      "Type": "String",
+      "Description": "The name of the AppSync API",
+      "Default": "AppSyncSimpleTransform"
+    },
+    "env": {
+      "Type": "String",
+      "Description": "The environment name. e.g. Dev, Test, or Production",
+      "Default": "NONE"
+    },
+    "S3DeploymentBucket": {
+      "Type": "String",
+      "Description": "The S3 bucket containing all deployment assets for the project."
+    },
+    "S3DeploymentRootKey": {
+      "Type": "String",
+      "Description": "An S3 key relative to the S3DeploymentBucket that points to the root\nof the deployment directory."
+    },
+    "OneSignalAppId": {
+      "Type": "String",
+      "Description": "The One Signal APP id"
+    },
+    "OneSignalRestKey": {
+      "Type": "String",
+      "Description": "The One Signal REST key"
+    }
+  },
+  "Resources": {
+    "OneSignalLambdaIAMRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::If": [
+            "HasEnvironmentParameter",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "OneSignalLambda",
+                  "role",
+                  {
+                    "Ref": "AppSyncApiId"
+                  },
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "OneSignalLambda",
+                  "role",
+                  {
+                    "Ref": "AppSyncApiId"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "DynamoDBAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetRecords",
+                    "dynamodb:GetShardIterator",
+                    "dynamodb:DescribeStream",
+                    "dynamodb:ListStreams"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": [
+                        "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}",
+                        {
+                          "tablename": {
+                            "Fn::If": [
+                              "HasEnvironmentParameter",
+                              {
+                                "Fn::Join": [
+                                  "-",
+                                  [
+                                    "Incident",
+                                    {
+                                      "Ref": "AppSyncApiId"
+                                    },
+                                    {
+                                      "Ref": "env"
+                                    }
+                                  ]
+                                ]
+                              },
+                              {
+                                "Fn::Join": [
+                                  "-",
+                                  [
+                                    "Incident",
+                                    {
+                                      "Ref": "AppSyncApiId"
+                                    }
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "Fn::Sub": [
+                        "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}/*",
+                        {
+                          "tablename": {
+                            "Fn::If": [
+                              "HasEnvironmentParameter",
+                              {
+                                "Fn::Join": [
+                                  "-",
+                                  [
+                                    "Incident",
+                                    {
+                                      "Ref": "AppSyncApiId"
+                                    },
+                                    {
+                                      "Ref": "env"
+                                    }
+                                  ]
+                                ]
+                              },
+                              {
+                                "Fn::Join": [
+                                  "-",
+                                  [
+                                    "Incident",
+                                    {
+                                      "Ref": "AppSyncApiId"
+                                    }
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "PolicyName": "CloudWatchLogsAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+                  "Resource": "arn:aws:logs:*:*:*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "OneSignalLambdaFn": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "Role": { "Fn::GetAtt": ["OneSignalLambdaIAMRole", "Arn"] },
+        "Code": {
+          "ZipFile": {
+            "Fn::Join": [
+              "\n",
+              [
+                "const https = require('https');",
+                "const ONE_SIGNAL_APP_ID = process.env.ONE_SIGNAL_APP_ID;",
+                "const ONE_SIGNAL_REST_KEY = process.env.ONE_SIGNAL_REST_KEY;",
+                "const DIST_RADIUS = 50 / 6371;",
+                "exports.handler = (event, context, callback) => {",
+                "  const records = event.Records.filter(r => r.eventName === 'INSERT');",
+                "  console.log(records);",
+                "  const res = Promise.all(",
+                "    records.map(record => {",
+                "      const incidentId = record.dynamodb.Keys.id.S;",
+                "      const lat = parseFloat(record.dynamodb.NewImage.location.M.lat.N);",
+                "      const lon = parseFloat(record.dynamodb.NewImage.location.M.lon.N);",
+                "      const user = record.dynamodb.NewImage.owner.S;",
+                "      const latMin = lat - DIST_RADIUS;",
+                "      const latMax = lat + DIST_RADIUS;",
+                "      const lonMin = lon - DIST_RADIUS;",
+                "      const lonMax = lon + DIST_RADIUS;",
+                "      return new Promise((resolve, reject) => {",
+                "        const postData = JSON.stringify({",
+                "          app_id: ONE_SIGNAL_APP_ID,",
+                "          url: `https://localhost/?incident=${incidentId}`,",
+                "          contents: {",
+                "            en: 'New flood point next to you',",
+                "            pt: 'Novo ponto de alagamento próximo a você',",
+                "          },",
+                "          filters: [",
+                "            { field: 'tag', key: 'latitude', relation: '>', value: latMin },",
+                "            { field: 'tag', key: 'latitude', relation: '<', value: latMax },",
+                "            { field: 'tag', key: 'longitude', relation: '>', value: lonMin },",
+                "            { field: 'tag', key: 'longitude', relation: '<', value: lonMax },",
+                "            { field: 'tag', key: 'user', relation: '!=', value: user },",
+                "          ],",
+                "        });",
+                "        console.log(postData);",
+                "        const options = {",
+                "          hostname: 'onesignal.com',",
+                "          port: 443,",
+                "          path: '/api/v1/notifications',",
+                "          method: 'POST',",
+                "          headers: {",
+                "            Authorization: `Basic ${ONE_SIGNAL_REST_KEY}`,",
+                "            'Content-Type': 'application/json',",
+                "            'Content-Length': Buffer.byteLength(postData),",
+                "          },",
+                "        };",
+                "        console.log(options);",
+                "        const req = https.request(options, res => {",
+                "          console.log(res.statusCode);",
+                "          if (res.statusCode >= 400) return reject();",
+                "          res.on('end', () => {",
+                "            return resolve();",
+                "          });",
+                "        });",
+                "        req.on('error', err => reject(err));",
+                "        req.write(postData);",
+                "        req.end();",
+                "      });",
+                "    }),",
+                "  );",
+                "  res",
+                "    .then(() => callback(null, `Successfully processed ${event.Records.length} records.`))",
+                "    .catch(err => callback(err));",
+                "};"
+              ]
+            ]
+          }
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": 300,
+        "Environment": {
+          "Variables": {
+            "ONE_SIGNAL_APP_ID": {
+              "Ref": "OneSignalAppId"
+            },
+            "ONE_SIGNAL_REST_KEY": {
+              "Ref": "OneSignalRestKey"
+            }
+          }
+        }
+      },
+      "DependsOn": ["OneSignalLambdaIAMRole"]
+    },
+    "OneSignalLambdaEventSourceMapping": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "BatchSize": 1,
+        "Enabled": true,
+        "EventSourceArn": {
+          "Fn::ImportValue": {
+            "Fn::Join": [
+              ":",
+              [
+                {
+                  "Ref": "AppSyncApiId"
+                },
+                "GetAtt",
+                "IncidentTable",
+                "StreamArn"
+              ]
+            ]
+          }
+        },
+        "FunctionName": {
+          "Fn::GetAtt": ["OneSignalLambdaFn", "Arn"]
+        },
+        "StartingPosition": "LATEST"
+      },
+      "DependsOn": ["OneSignalLambdaFn"]
+    }
+  },
+  "Conditions": {
+    "HasEnvironmentParameter": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "env"
+            },
+            "NONE"
+          ]
+        }
+      ]
+    },
+    "AlwaysFalse": {
+      "Fn::Equals": ["true", "false"]
+    }
+  }
+}
