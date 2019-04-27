@@ -1,5 +1,6 @@
 const { resolve } = require("path");
 const { readFileSync, writeFileSync } = require("fs");
+const { spawn } = require("child_process");
 
 function overwrite(path, transformer) {
   const absPath = resolve(path);
@@ -18,4 +19,18 @@ function overwrite(path, transformer) {
   };
 }
 
+function exec(cmd) {
+  return new Promise((resolve, reject) => {
+    console.log("Running cmd " + cmd);
+    const proc = spawn(cmd, { shell: true });
+    proc.stderr.pipe(process.stderr);
+    proc.stdout.pipe(process.stdout);
+    proc.on("close", code => {
+      if (code !== 0) return reject(code);
+      return resolve(code);
+    });
+  });
+}
+
 module.exports.overwrite = overwrite;
+module.exports.exec = exec;
