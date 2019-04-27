@@ -13,7 +13,7 @@ function restoreParams() {
 }
 
 function escape(p) {
-  return `${p.replace(/"/g, "\\\"")}`;
+  return `"${p.replace(/"/g, "\\\"")}"`;
 }
 async function main() {
   const config = {
@@ -39,7 +39,7 @@ async function main() {
     } else {
       console.log(`# Importing Amplify environment: ${ENV} (amplify env add)`);
       await exec(
-        `amplify env add --name ${ENV} --config ${escape(STACKINFO)} --awsInfo ${escape(AWSCONFIG)} --yes`,
+        `amplify env add --name ${ENV} --config "${STACKINFO}" --awsInfo ${escape(AWSCONFIG)} --yes`,
       );
       console.log(`# Initializing existing Amplify environment: ${ENV} (amplify init)`);
       await exec(`amplify init --amplify ${escape(AMPLIFY)} --providers ${escape(PROVIDERS)} --yes`);
