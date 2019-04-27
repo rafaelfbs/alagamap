@@ -1,6 +1,13 @@
 const { overwrite, exec } = require("./util");
 
+const AUTH_PARAMETERS_PATH = "./amplify/backend/auth/cognito6170dcc7/parameters.json";
 const API_PARAMETERS_PATH = "./amplify/backend/api/alagamap/parameters.json";
+
+const authParams = overwrite(AUTH_PARAMETERS_PATH, data => ({
+  ...data,
+  googleAppIdUserPool: process.env.GOOGLE_CREDENTIALS_CLIENT_ID,
+  googleAppSecretUserPool: process.env.GOOGLE_CREDENTIALS_CLIENT_SECRET,
+}));
 
 const apiParams = overwrite(API_PARAMETERS_PATH, data => ({
   ...data,
@@ -8,8 +15,11 @@ const apiParams = overwrite(API_PARAMETERS_PATH, data => ({
   OneSignalRestKey: process.env.ONE_SIGNAL_REST_KEY,
 }));
 
+
+
 function restoreParams() {
   apiParams();
+  authParams();
 }
 
 function escape(p) {
