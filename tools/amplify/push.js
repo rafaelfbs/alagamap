@@ -13,18 +13,19 @@ function restoreParams() {
 }
 
 async function main() {
-  const ENV = process.env.ENV || "dev";
-  const STACKINFO = process.env.STACKINFO;
-  const AWSCONFIG = JSON.stringify({
+  const config = {
     configLevel: "project",
     useProfile: true,
     profileName: "default",
-  });
+  };
+  const ENV = process.env.ENV || "dev";
+  const STACKINFO = process.env.STACKINFO;
+  const AWSCONFIG = JSON.stringify(config);
   const AMPLIFY = JSON.stringify({
     envName: ENV,
   });
   const PROVIDERS = JSON.stringify({
-    awscloudformation: AWSCONFIG,
+    awscloudformation: config,
   });
   try {
     if (!process.env.STACKINFO) {
