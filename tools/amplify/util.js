@@ -11,6 +11,7 @@ function overwrite(path, transformer) {
   }
 
   const newData = transformer(data);
+  console.log(`New data for ${path}:\n${JSON.stringify(newData, null, 4)}`);
   writeFileSync(absPath, JSON.stringify(newData, null, 4));
 
   return () => {
