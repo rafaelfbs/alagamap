@@ -12,6 +12,9 @@ function restoreParams() {
   apiParams();
 }
 
+function escape(p) {
+  return `${p.replace(/"/g, "\\\"")}`;
+}
 async function main() {
   const config = {
     configLevel: "project",
@@ -30,16 +33,16 @@ async function main() {
   try {
     if (!process.env.STACKINFO) {
       console.log(`# Initializing new Amplify environment: ${ENV} (amplify init)`);
-      await exec(`amplify init --amplify ${AMPLIFY} --providers ${PROVIDERS} --yes`);
+      await exec(`amplify init --amplify ${escape(AMPLIFY)} --providers ${escape(PROVIDERS)} --yes`);
       console.log(`# Environment ${ENV} details:`);
       await exec(`amplify env get --name ${ENV}`);
     } else {
       console.log(`# Importing Amplify environment: ${ENV} (amplify env add)`);
       await exec(
-        `amplify env add --name ${ENV} --config "${STACKINFO}" --awsInfo ${AWSCONFIG} --yes`,
+        `amplify env add --name ${ENV} --config ${escape(STACKINFO)} --awsInfo ${escape(AWSCONFIG)} --yes`,
       );
       console.log(`# Initializing existing Amplify environment: ${ENV} (amplify init)`);
-      await exec(`amplify init --amplify ${AMPLIFY} --providers ${PROVIDERS} --yes`);
+      await exec(`amplify init --amplify ${escape(AMPLIFY)} --providers ${escape(PROVIDERS)} --yes`);
       console.log(`# Environment ${ENV} details:`);
       await exec(`amplify env get --name ${ENV}`);
     }
