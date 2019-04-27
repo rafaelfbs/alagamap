@@ -1,4 +1,4 @@
-const { execSync } = require("child_process");
+const { spawn } = require("child_process");
 const { overwrite } = require("./util");
 
 const AUTH_PARAMETERS_PATH = "./amplify/backend/auth/cognito6170dcc7/parameters.json";
@@ -16,7 +16,14 @@ const apiParams = overwrite(API_PARAMETERS_PATH, data => ({
   OneSignalRestKey: process.env.ONE_SIGNAL_REST_KEY,
 }));
 
-execSync("amplifyPush --simple", { stdio: "inherit" });
+const amplifyPush = spawn("amplifyPush --simple", {
+  stdio: "inherit",
+  shell: true,
+});
 
-apiParams();
-authParams();
+amplifyPush.on("close", code => {
+  apiParams();
+  authParams();
+
+  process.exit(code);
+});
