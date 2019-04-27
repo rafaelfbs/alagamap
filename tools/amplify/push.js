@@ -13,10 +13,37 @@ function restoreParams() {
 }
 
 async function main() {
+  const ENV = process.env.ENV || "dev";
+  const STACKINFO = process.env.STACKINFO;
+  const AWSCONFIG = JSON.stringify({
+    configLevel: "project",
+    useProfile: true,
+    profileName: "default",
+  });
+  const AMPLIFY = JSON.stringify({
+    envName: ENV,
+  });
+  const PROVIDERS = JSON.stringify({
+    awscloudformation: AWSCONFIG,
+  });
   try {
-    await exec("amplify env list");
-    await exec(`amplify env checkout ${process.env.USER_BRANCH || "dev"} --restore`);
-    await exec("amplify push --yes");
+    if (!process.env.STACKINFO) {
+      console.log(`# Initializing new Amplify environment: ${ENV} (amplify init)`);
+      await exec(`amplify init --amplify ${AMPLIFY} --providers ${PROVIDERS} --yes`);
+      console.log(`# Environment ${ENV} details:`);
+      await exec(`amplify env get --name ${ENV}`);
+    } else {
+      console.log(`# Importing Amplify environment: ${ENV} (amplify env add)`);
+      await exec(
+        `amplify env add --name ${ENV} --config "${STACKINFO}" --awsInfo ${AWSCONFIG} --yes`,
+      );
+      console.log(`# Initializing existing Amplify environment: ${ENV} (amplify init)`);
+      await exec(`amplify init --amplify ${AMPLIFY} --providers ${PROVIDERS} --yes`);
+      console.log(`# Environment ${ENV} details:`);
+      await exec(`amplify env get --name ${ENV}`);
+    }
+
+    console.log(`# Done initializing Amplify environment: ${ENV}`);
     restoreParams();
   } catch (code) {
     restoreParams();
