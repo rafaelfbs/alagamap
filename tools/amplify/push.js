@@ -14,6 +14,7 @@ function restoreParams() {
 
 async function main() {
   try {
+    await exec("amplify env list");
     await exec(`amplify env checkout ${process.env.USER_BRANCH || "dev"} --restore`);
     await exec("amplify push --yes");
     restoreParams();
