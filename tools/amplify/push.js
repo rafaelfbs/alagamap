@@ -6,7 +6,7 @@ const AMPLIFYCMD = join(dirname(AMPLIFYDIR), "bin/amplify");
 
 const ENV = process.env.ENV || "dev";
 
-const AWSCLOUDFORMATION = JSON.parse(process.env.AWSCLOUDFORMATION);
+const AWSCLOUDFORMATION = JSON.parse(process.env.CLOUDFORMATIONCONFIG);
 
 const STACKINFO = {
   awscloudformation: AWSCLOUDFORMATION,
