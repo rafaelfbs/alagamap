@@ -8,7 +8,7 @@ const useGeoLoc = () => {
   });
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.watchPosition(
       position =>
         setGeoLocState({
           loaded: true,
@@ -19,6 +19,7 @@ const useGeoLoc = () => {
           error: null,
         }),
       error => setGeoLocState({ loaded: true, error, position: null }),
+      { enableHighAccuracy: true },
     );
   }, []);
 
