@@ -34,6 +34,7 @@ export interface MapProps {
   devicePosition: google.maps.LatLngLiteral;
   currentPosition: google.maps.LatLngLiteral;
   setCurrentPosition: (pos: google.maps.LatLngLiteral) => void;
+  setCurrentBounds: (bounds: google.maps.LatLngBounds) => void;
   nearbyIncidents: Incident[];
   createIncident: MutationFn<Incident, { input: CreateIncidentInput }>;
 }
@@ -42,6 +43,7 @@ const Map = ({
   devicePosition,
   currentPosition,
   setCurrentPosition,
+  setCurrentBounds,
   nearbyIncidents,
   createIncident,
 }: MapProps) => {
@@ -58,6 +60,7 @@ const Map = ({
       defaultOptions={DEFAULT_MAP_OPTIONS}
       onClick={(e: google.maps.IconMouseEvent) => (e.placeId ? setSelectedMarker(null) : null)}
       onCenterChanged={() => setCurrentPosition(mapRef.current.getCenter().toJSON())}
+      onBoundsChanged={() => setCurrentBounds(mapRef.current.getBounds())}
     >
       <MapAddressSearchViewer setSelectedSearchLocation={setCurrentPosition} />
       <MapListIncidentMarkersViewer

@@ -24,6 +24,7 @@ const CreateIncidentMutation = gql`
 const MapManager = ({ loggedInUser }: { loggedInUser: string }) => {
   const geo = useGeoLoc();
   const [currentPosition, setCurrentPosition] = React.useState(geo.position);
+  const [searchDistance, setSearchDistance] = React.useState(5);
 
   React.useEffect(() => {
     if (geo.position) {
@@ -45,7 +46,11 @@ const MapManager = ({ loggedInUser }: { loggedInUser: string }) => {
     return <div>Loading...</div>;
   }
 
-  const variables = { location: currentPosition && toLoc(currentPosition), km: 5, limit: 1000 };
+  const variables = {
+    location: currentPosition && toLoc(currentPosition),
+    km: searchDistance,
+    limit: 1000,
+  };
 
   return (
     <Mutation
@@ -60,6 +65,14 @@ const MapManager = ({ loggedInUser }: { loggedInUser: string }) => {
               devicePosition={geo.position}
               currentPosition={currentPosition}
               setCurrentPosition={setCurrentPosition}
+              setCurrentBounds={bounds =>
+                setSearchDistance(
+                  google.maps.geometry.spherical.computeDistanceBetween(
+                    bounds.getNorthEast(),
+                    bounds.getCenter(),
+                  ) / 1000,
+                )
+              }
               nearbyIncidents={(data && data.nearbyIncidents && data.nearbyIncidents.items) || []}
               createIncident={createIncident}
               googleMapURL={GOOGLE_MAPS_URL}
