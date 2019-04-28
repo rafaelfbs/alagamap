@@ -19,9 +19,6 @@ enum IncidentType
 type Incident
   @model
   @searchable
-  @auth(rules: [
-    {allow: owner}
-  ])
 {
   id: ID!
   location: Location!
