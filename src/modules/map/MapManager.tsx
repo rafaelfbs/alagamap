@@ -45,7 +45,7 @@ const MapManager = ({ loggedInUser }: { loggedInUser: string }) => {
     return <div>Loading...</div>;
   }
 
-  const variables = { location: toLoc(currentPosition), km: 5, limit: 1000 };
+  const variables = { location: currentPosition && toLoc(currentPosition), km: 5, limit: 1000 };
 
   return (
     <Mutation
