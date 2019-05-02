@@ -4,6 +4,7 @@
 #set( $indexPath = "/incident/doc/_search" )
 #set( $distance = $util.defaultIfNull($ctx.args.km, 200) )
 #set( $limit = $util.defaultIfNull($ctx.args.limit, 1000) )
+#set( $createdAt = $util.defaultIfNull($ctx.args.createdAt, null) )
 {
   "version": "2017-02-28",
   "operation": "GET",
@@ -12,8 +13,12 @@
     "body": {
       "query": {
         "bool" : {
-          "must" : {
-            "match_all" : {}
+          "must": {
+            "range": {
+              "createdAt": {
+                "gte": "2019-04-30T01:16:05"
+              }
+            }
           },
           "filter" : {
             "geo_distance" : {

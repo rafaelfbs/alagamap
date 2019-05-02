@@ -24,6 +24,7 @@ type Incident
   location: Location!
   incidentType: IncidentType!
   incidentStatuses: [IncidentStatus] @connection(name: "IncidentStatuses")
+  reporter: String
 }
 
 enum IncidentStatusType {
@@ -33,10 +34,12 @@ enum IncidentStatusType {
 
 type IncidentStatus
   @model
+  @searchable
 {
   id: ID!
   statusType: IncidentStatusType!
   incident: Incident! @connection(name: "IncidentStatuses")
+  reporter: String
 }
 
 type IncidentConnection {
@@ -47,5 +50,5 @@ type IncidentConnection {
 
 type Query
 {
-  nearbyIncidents(location: LocationInput!, km: Int): IncidentConnection
+  nearbyIncidents(location: LocationInput!, km: Int, createdAt: String!): IncidentConnection
 }

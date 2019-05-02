@@ -1,13 +1,16 @@
 import * as React from "react";
-import { MutationFn } from "react-apollo";
 import { GoogleMap } from "react-google-maps";
-import { CreateIncidentInput, IncidentType } from "../../api";
-import { toLoc } from "../shared/converters";
-import { Incident } from "../shared/types";
+import { Query } from "react-apollo";
 import { MapActionsViewer } from "./viewer/MapActionsViewer";
 import { MapAddressSearchViewer } from "./viewer/MapAddressSearchViewer";
 import { MapCreateIncidentViewer } from "./viewer/MapCreateIncidentViewer";
-import { MapListIncidentMarkersViewer } from "./viewer/MapListIncidentMarkersViewer";
+import {
+  MapListIncidentMarkersViewer,
+  MapListIncidentMarkersViewerQuery,
+} from "./viewer/MapListIncidentMarkersViewer";
+import { useGeoLoc } from "../../hooks/geo-loc";
+import { toLoc } from "../shared/converters";
+import throttle from "lodash/throttle";
 
 const DEFAULT_MAP_OPTIONS = {
   zoomControl: false,
@@ -31,59 +34,82 @@ const DEFAULT_MAP_OPTIONS = {
 };
 
 export interface MapProps {
-  devicePosition: google.maps.LatLngLiteral;
-  currentPosition: google.maps.LatLngLiteral;
-  setCurrentPosition: (pos: google.maps.LatLngLiteral) => void;
-  setCurrentBounds: (bounds: google.maps.LatLngBounds) => void;
-  nearbyIncidents: Incident[];
-  createIncident: MutationFn<Incident, { input: CreateIncidentInput }>;
+  loggedInUser: string;
 }
 
-const Map = ({
-  devicePosition,
-  currentPosition,
-  setCurrentPosition,
-  setCurrentBounds,
-  nearbyIncidents,
-  createIncident,
-}: MapProps) => {
+const getRange = (bounds: google.maps.LatLngBounds) =>
+  Math.ceil(
+    google.maps.geometry.spherical.computeDistanceBetween(
+      bounds.getNorthEast(),
+      bounds.getCenter(),
+    ) / 1000,
+  );
+
+const throttleQuery = throttle(fn => fn(), 500);
+
+const Map = ({ loggedInUser }: MapProps) => {
   const mapRef = React.useRef<GoogleMap>(null);
+  const geo = useGeoLoc();
   const [creating, setCreating] = React.useState(false);
   const [selectedMarker, setSelectedMarker] = React.useState(null);
+  const [queryVars, setQueryVars] = React.useState({ center: geo.position, range: 5 });
+
+  const devicePosition = !geo.loaded || geo.error ? { lat: -22, lng: -45 } : geo.position;
+  const currentPosition = queryVars.center || devicePosition;
+  const currentRange = queryVars.range;
+  const yesterday = [new Date()].map(d => (d.setDate(d.getDate() - 1), d))[0].toISOString();
 
   return (
     <GoogleMap
       ref={mapRef}
       defaultZoom={15}
-      defaultCenter={currentPosition}
-      center={currentPosition}
+      defaultCenter={devicePosition}
       defaultOptions={DEFAULT_MAP_OPTIONS}
       onClick={(e: google.maps.IconMouseEvent) => (e.placeId ? setSelectedMarker(null) : null)}
-      onCenterChanged={() => setCurrentPosition(mapRef.current.getCenter().toJSON())}
-      onBoundsChanged={() => setCurrentBounds(mapRef.current.getBounds())}
+      onCenterChanged={() => {
+        const center = mapRef.current.getCenter().toJSON();
+        const range = getRange(mapRef.current.getBounds());
+        throttleQuery(() => {
+          setQueryVars({ center, range });
+        });
+      }}
     >
-      <MapAddressSearchViewer setSelectedSearchLocation={setCurrentPosition} />
-      <MapListIncidentMarkersViewer
-        incidents={nearbyIncidents}
-        selectedMarker={selectedMarker}
-        setSelectedMarker={setSelectedMarker}
+      <MapAddressSearchViewer
+        setSelectedSearchLocation={position => mapRef.current.panTo(position)}
       />
-      <MapCreateIncidentViewer creating={creating} currentPosition={currentPosition} />
+      <Query
+        query={MapListIncidentMarkersViewerQuery}
+        variables={{
+          location: toLoc(currentPosition),
+          km: currentRange,
+          createdAt: yesterday,
+        }}
+        pollInterval={10000}
+      >
+        {({ data }) => (
+          <MapListIncidentMarkersViewer
+            incidents={(data && data.nearbyIncidents && data.nearbyIncidents.items) || []}
+            currentPosition={currentPosition}
+            currentRange={currentRange}
+            loggedInUser={loggedInUser}
+            selectedMarker={selectedMarker}
+            setSelectedMarker={setSelectedMarker}
+          />
+        )}
+      </Query>
+      <MapCreateIncidentViewer
+        creating={creating}
+        currentPosition={currentPosition}
+        loggedInUser={loggedInUser}
+      />
       <MapActionsViewer
+        currentPosition={currentPosition}
+        currentRange={currentRange}
+        loggedInUser={loggedInUser}
         creating={creating}
         startCreation={() => setCreating(true)}
-        finishCreation={async () => {
-          await createIncident({
-            variables: {
-              input: {
-                incidentType: IncidentType.FLOOD,
-                location: toLoc(currentPosition),
-              },
-            },
-          });
-          setCreating(false);
-        }}
-        resetPosition={() => setCurrentPosition(devicePosition)}
+        finishCreation={() => setCreating(false)}
+        resetPosition={() => mapRef.current.panTo(devicePosition)}
       />
     </GoogleMap>
   );

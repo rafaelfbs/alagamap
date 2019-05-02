@@ -5,6 +5,7 @@ export type CreateIncidentInput = {
   id?: string | null,
   location: LocationInput,
   incidentType: IncidentType,
+  reporter?: string | null,
 };
 
 export type LocationInput = {
@@ -27,6 +28,7 @@ export type UpdateIncidentInput = {
   id: string,
   location?: LocationInput | null,
   incidentType?: IncidentType | null,
+  reporter?: string | null,
 };
 
 export type DeleteIncidentInput = {
@@ -36,12 +38,14 @@ export type DeleteIncidentInput = {
 export type CreateIncidentStatusInput = {
   id?: string | null,
   statusType: IncidentStatusType,
+  reporter?: string | null,
   incidentStatusIncidentId: string,
 };
 
 export type UpdateIncidentStatusInput = {
   id: string,
   statusType?: IncidentStatusType | null,
+  reporter?: string | null,
   incidentStatusIncidentId?: string | null,
 };
 
@@ -52,6 +56,7 @@ export type DeleteIncidentStatusInput = {
 export type ModelIncidentFilterInput = {
   id?: ModelIDFilterInput | null,
   incidentType?: ModelIncidentTypeFilterInput | null,
+  reporter?: ModelStringFilterInput | null,
   and?: Array< ModelIncidentFilterInput | null > | null,
   or?: Array< ModelIncidentFilterInput | null > | null,
   not?: ModelIncidentFilterInput | null,
@@ -75,9 +80,23 @@ export type ModelIncidentTypeFilterInput = {
   ne?: IncidentType | null,
 };
 
+export type ModelStringFilterInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
 export type ModelIncidentStatusFilterInput = {
   id?: ModelIDFilterInput | null,
   statusType?: ModelIncidentStatusTypeFilterInput | null,
+  reporter?: ModelStringFilterInput | null,
   and?: Array< ModelIncidentStatusFilterInput | null > | null,
   or?: Array< ModelIncidentStatusFilterInput | null > | null,
   not?: ModelIncidentStatusFilterInput | null,
@@ -90,12 +109,25 @@ export type ModelIncidentStatusTypeFilterInput = {
 
 export type SearchableIncidentFilterInput = {
   id?: SearchableIDFilterInput | null,
+  reporter?: SearchableStringFilterInput | null,
   and?: Array< SearchableIncidentFilterInput | null > | null,
   or?: Array< SearchableIncidentFilterInput | null > | null,
   not?: SearchableIncidentFilterInput | null,
 };
 
 export type SearchableIDFilterInput = {
+  ne?: string | null,
+  eq?: string | null,
+  match?: string | null,
+  matchPhrase?: string | null,
+  matchPhrasePrefix?: string | null,
+  multiMatch?: string | null,
+  exists?: boolean | null,
+  wildcard?: string | null,
+  regexp?: string | null,
+};
+
+export type SearchableStringFilterInput = {
   ne?: string | null,
   eq?: string | null,
   match?: string | null,
@@ -114,12 +146,32 @@ export type SearchableIncidentSortInput = {
 
 export enum SearchableIncidentSortableFields {
   id = "id",
+  reporter = "reporter",
 }
 
 
 export enum SearchableSortDirection {
   asc = "asc",
   desc = "desc",
+}
+
+
+export type SearchableIncidentStatusFilterInput = {
+  id?: SearchableIDFilterInput | null,
+  reporter?: SearchableStringFilterInput | null,
+  and?: Array< SearchableIncidentStatusFilterInput | null > | null,
+  or?: Array< SearchableIncidentStatusFilterInput | null > | null,
+  not?: SearchableIncidentStatusFilterInput | null,
+};
+
+export type SearchableIncidentStatusSortInput = {
+  field?: SearchableIncidentStatusSortableFields | null,
+  direction?: SearchableSortDirection | null,
+};
+
+export enum SearchableIncidentStatusSortableFields {
+  id = "id",
+  reporter = "reporter",
 }
 
 
@@ -147,10 +199,13 @@ export type CreateIncidentMutation = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          reporter: string | null,
         },
+        reporter: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
+    reporter: string | null,
   } | null,
 };
 
@@ -178,10 +233,13 @@ export type UpdateIncidentMutation = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          reporter: string | null,
         },
+        reporter: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
+    reporter: string | null,
   } | null,
 };
 
@@ -209,10 +267,13 @@ export type DeleteIncidentMutation = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          reporter: string | null,
         },
+        reporter: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
+    reporter: string | null,
   } | null,
 };
 
@@ -240,10 +301,13 @@ export type CreateIncidentStatusMutation = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     },
+    reporter: string | null,
   } | null,
 };
 
@@ -271,10 +335,13 @@ export type UpdateIncidentStatusMutation = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     },
+    reporter: string | null,
   } | null,
 };
 
@@ -302,16 +369,20 @@ export type DeleteIncidentStatusMutation = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     },
+    reporter: string | null,
   } | null,
 };
 
 export type NearbyIncidentsQueryVariables = {
   location: LocationInput,
   km?: number | null,
+  createdAt: string,
 };
 
 export type NearbyIncidentsQuery = {
@@ -332,9 +403,11 @@ export type NearbyIncidentsQuery = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     } | null > | null,
     total: number | null,
     nextToken: string | null,
@@ -365,10 +438,13 @@ export type GetIncidentQuery = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          reporter: string | null,
         },
+        reporter: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
+    reporter: string | null,
   } | null,
 };
 
@@ -396,9 +472,11 @@ export type ListIncidentsQuery = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -428,10 +506,13 @@ export type GetIncidentStatusQuery = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     },
+    reporter: string | null,
   } | null,
 };
 
@@ -461,7 +542,9 @@ export type ListIncidentStatussQuery = {
           __typename: "ModelIncidentStatusConnection",
           nextToken: string | null,
         } | null,
+        reporter: string | null,
       },
+      reporter: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -492,9 +575,46 @@ export type SearchIncidentsQuery = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type SearchIncidentStatussQueryVariables = {
+  filter?: SearchableIncidentStatusFilterInput | null,
+  sort?: SearchableIncidentStatusSortInput | null,
+  limit?: number | null,
+  nextToken?: number | null,
+};
+
+export type SearchIncidentStatussQuery = {
+  searchIncidentStatuss:  {
+    __typename: "SearchableIncidentStatusConnection",
+    items:  Array< {
+      __typename: "IncidentStatus",
+      id: string,
+      statusType: IncidentStatusType,
+      incident:  {
+        __typename: "Incident",
+        id: string,
+        location:  {
+          __typename: "Location",
+          lat: number,
+          lon: number,
+        },
+        incidentType: IncidentType,
+        incidentStatuses:  {
+          __typename: "ModelIncidentStatusConnection",
+          nextToken: string | null,
+        } | null,
+        reporter: string | null,
+      },
+      reporter: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -520,10 +640,13 @@ export type OnCreateIncidentSubscription = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          reporter: string | null,
         },
+        reporter: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
+    reporter: string | null,
   } | null,
 };
 
@@ -547,10 +670,13 @@ export type OnUpdateIncidentSubscription = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          reporter: string | null,
         },
+        reporter: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
+    reporter: string | null,
   } | null,
 };
 
@@ -574,10 +700,13 @@ export type OnDeleteIncidentSubscription = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          reporter: string | null,
         },
+        reporter: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
+    reporter: string | null,
   } | null,
 };
 
@@ -601,10 +730,13 @@ export type OnCreateIncidentStatusSubscription = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     },
+    reporter: string | null,
   } | null,
 };
 
@@ -628,10 +760,13 @@ export type OnUpdateIncidentStatusSubscription = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     },
+    reporter: string | null,
   } | null,
 };
 
@@ -655,9 +790,12 @@ export type OnDeleteIncidentStatusSubscription = {
           __typename: "IncidentStatus",
           id: string,
           statusType: IncidentStatusType,
+          reporter: string | null,
         } | null > | null,
         nextToken: string | null,
       } | null,
+      reporter: string | null,
     },
+    reporter: string | null,
   } | null,
 };

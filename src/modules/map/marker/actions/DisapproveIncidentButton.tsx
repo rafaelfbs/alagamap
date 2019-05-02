@@ -25,15 +25,18 @@ const getDisapprovingStatusesQuery = gql`
 
 export interface DisapproveIncidentButtonProps {
   incident: Incident;
+  readOnly?: boolean;
+  loggedInUser: string;
 }
 
-const DisapproveIncidentButton = ({ incident }: DisapproveIncidentButtonProps) => (
+const DisapproveIncidentButton = ({ incident, readOnly, loggedInUser }: DisapproveIncidentButtonProps) => (
   <Mutation
     mutation={createIncidentStatusMutation}
     variables={{
       input: {
         statusType: IncidentStatusType.DISAPPROVE,
         incidentStatusIncidentId: incident.id,
+        reporter: loggedInUser,
       },
     }}
     refetchQueries={() => [{ query: getDisapprovingStatusesQuery, variables: { id: incident.id } }]}
@@ -42,7 +45,7 @@ const DisapproveIncidentButton = ({ incident }: DisapproveIncidentButtonProps) =
     {approve => (
       <Query query={getDisapprovingStatusesQuery} variables={{ id: incident.id }}>
         {({ data }) => (
-          <Button onClick={() => approve()}>
+          <Button onClick={() => approve()} disabled={readOnly}>
             SOLUCIONADO (
             {data && data.getIncident && data.getIncident.incidentStatuses
               ? data.getIncident.incidentStatuses.items.length

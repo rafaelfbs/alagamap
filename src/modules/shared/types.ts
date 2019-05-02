@@ -6,4 +6,5 @@ export interface Location {
 export interface Incident {
   id: string;
   location: Location;
+  reporter: string;
 }

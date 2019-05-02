@@ -16,10 +16,13 @@ export const createIncident = `mutation CreateIncident($input: CreateIncidentInp
         incident {
           id
           incidentType
+          reporter
         }
+        reporter
       }
       nextToken
     }
+    reporter
   }
 }
 `;
@@ -38,10 +41,13 @@ export const updateIncident = `mutation UpdateIncident($input: UpdateIncidentInp
         incident {
           id
           incidentType
+          reporter
         }
+        reporter
       }
       nextToken
     }
+    reporter
   }
 }
 `;
@@ -60,10 +66,13 @@ export const deleteIncident = `mutation DeleteIncident($input: DeleteIncidentInp
         incident {
           id
           incidentType
+          reporter
         }
+        reporter
       }
       nextToken
     }
+    reporter
   }
 }
 `;
@@ -82,10 +91,13 @@ export const createIncidentStatus = `mutation CreateIncidentStatus($input: Creat
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
+    reporter
   }
 }
 `;
@@ -104,10 +116,13 @@ export const updateIncidentStatus = `mutation UpdateIncidentStatus($input: Updat
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
+    reporter
   }
 }
 `;
@@ -126,10 +141,13 @@ export const deleteIncidentStatus = `mutation DeleteIncidentStatus($input: Delet
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
+    reporter
   }
 }
 `;

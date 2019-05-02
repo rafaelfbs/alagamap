@@ -16,10 +16,13 @@ export const onCreateIncident = `subscription OnCreateIncident {
         incident {
           id
           incidentType
+          reporter
         }
+        reporter
       }
       nextToken
     }
+    reporter
   }
 }
 `;
@@ -38,10 +41,13 @@ export const onUpdateIncident = `subscription OnUpdateIncident {
         incident {
           id
           incidentType
+          reporter
         }
+        reporter
       }
       nextToken
     }
+    reporter
   }
 }
 `;
@@ -60,10 +66,13 @@ export const onDeleteIncident = `subscription OnDeleteIncident {
         incident {
           id
           incidentType
+          reporter
         }
+        reporter
       }
       nextToken
     }
+    reporter
   }
 }
 `;
@@ -82,10 +91,13 @@ export const onCreateIncidentStatus = `subscription OnCreateIncidentStatus {
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
+    reporter
   }
 }
 `;
@@ -104,10 +116,13 @@ export const onUpdateIncidentStatus = `subscription OnUpdateIncidentStatus {
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
+    reporter
   }
 }
 `;
@@ -126,10 +141,13 @@ export const onDeleteIncidentStatus = `subscription OnDeleteIncidentStatus {
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
+    reporter
   }
 }
 `;

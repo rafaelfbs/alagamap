@@ -19,12 +19,14 @@ const style = createStyles({
 export interface MapCreateIncidentViewerProps extends WithStyles<typeof style> {
   creating: boolean;
   currentPosition: google.maps.LatLngLiteral;
+  loggedInUser: string;
 }
 
 const MapCreateIncidentViewerBase = ({
   creating,
   currentPosition,
   classes,
+  loggedInUser,
 }: MapCreateIncidentViewerProps) =>
   creating && (
     <React.Fragment>
@@ -35,6 +37,7 @@ const MapCreateIncidentViewerBase = ({
         animation={google.maps.Animation.DROP}
         position={currentPosition}
         isSelected={false}
+        loggedInUser={loggedInUser}
       />
     </React.Fragment>
   );

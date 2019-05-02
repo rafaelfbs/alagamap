@@ -1,8 +1,12 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const nearbyIncidents = `query NearbyIncidents($location: LocationInput!, $km: Int) {
-  nearbyIncidents(location: $location, km: $km) {
+export const nearbyIncidents = `query NearbyIncidents(
+  $location: LocationInput!
+  $km: Int
+  $createdAt: String!
+) {
+  nearbyIncidents(location: $location, km: $km, createdAt: $createdAt) {
     items {
       id
       location {
@@ -14,9 +18,11 @@ export const nearbyIncidents = `query NearbyIncidents($location: LocationInput!,
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
     total
     nextToken
@@ -38,10 +44,13 @@ export const getIncident = `query GetIncident($id: ID!) {
         incident {
           id
           incidentType
+          reporter
         }
+        reporter
       }
       nextToken
     }
+    reporter
   }
 }
 `;
@@ -62,9 +71,11 @@ export const listIncidents = `query ListIncidents(
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
     nextToken
   }
@@ -85,10 +96,13 @@ export const getIncidentStatus = `query GetIncidentStatus($id: ID!) {
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
     }
+    reporter
   }
 }
 `;
@@ -111,7 +125,9 @@ export const listIncidentStatuss = `query ListIncidentStatuss(
         incidentStatuses {
           nextToken
         }
+        reporter
       }
+      reporter
     }
     nextToken
   }
@@ -140,9 +156,44 @@ export const searchIncidents = `query SearchIncidents(
         items {
           id
           statusType
+          reporter
         }
         nextToken
       }
+      reporter
+    }
+    nextToken
+  }
+}
+`;
+export const searchIncidentStatuss = `query SearchIncidentStatuss(
+  $filter: SearchableIncidentStatusFilterInput
+  $sort: SearchableIncidentStatusSortInput
+  $limit: Int
+  $nextToken: Int
+) {
+  searchIncidentStatuss(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      statusType
+      incident {
+        id
+        location {
+          lat
+          lon
+        }
+        incidentType
+        incidentStatuses {
+          nextToken
+        }
+        reporter
+      }
+      reporter
     }
     nextToken
   }

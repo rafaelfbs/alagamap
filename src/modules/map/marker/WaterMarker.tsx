@@ -15,6 +15,7 @@ interface WaterMarkerProps {
   position: GeoPosition;
   incident?: Incident;
   animation?: google.maps.Animation;
+  loggedInUser: string;
   isSelected: boolean;
   onSelect?: () => void;
   onClose?: () => void;
@@ -24,6 +25,7 @@ const WaterMarker = ({
   position,
   incident,
   animation,
+  loggedInUser,
   isSelected,
   onSelect,
   onClose,
@@ -31,7 +33,7 @@ const WaterMarker = ({
   <Marker position={position} icon={image.src} defaultAnimation={animation} onClick={onSelect}>
     {isSelected && !!incident && (
       <InfoWindow onCloseClick={onClose}>
-        <WaterInfoWindow incident={incident} />
+        <WaterInfoWindow incident={incident} loggedInUser={loggedInUser} />
       </InfoWindow>
     )}
   </Marker>
