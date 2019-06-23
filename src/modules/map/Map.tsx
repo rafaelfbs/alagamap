@@ -1,9 +1,9 @@
 import * as React from "react";
 import { GoogleMap } from "react-google-maps";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import { MapActionsViewer } from "./viewer/MapActionsViewer";
 import { MapAddressSearchViewer } from "./viewer/MapAddressSearchViewer";
-import { MapCreateIncidentViewer } from "./viewer/MapCreateIncidentViewer";
+import { MapCreateIncidentViewer, MapCreateIncidentMutation } from "./viewer/MapCreateIncidentViewer";
 import {
   MapListIncidentMarkersViewer,
   MapListIncidentMarkersViewerQuery,
@@ -97,20 +97,45 @@ const Map = ({ loggedInUser }: MapProps) => {
           />
         )}
       </Query>
-      <MapCreateIncidentViewer
-        creating={creating}
-        currentPosition={currentPosition}
-        loggedInUser={loggedInUser}
-      />
-      <MapActionsViewer
-        currentPosition={currentPosition}
-        currentRange={currentRange}
-        loggedInUser={loggedInUser}
-        creating={creating}
-        startCreation={() => setCreating(true)}
-        finishCreation={() => setCreating(false)}
-        resetPosition={() => mapRef.current.panTo(devicePosition)}
-      />
+      <Mutation
+        mutation={MapCreateIncidentMutation}
+        refetchQueries={() => [
+          {
+            query: MapListIncidentMarkersViewerQuery,
+            variables: {
+              location: toLoc(currentPosition),
+              km: currentRange,
+              createdAt: yesterday,
+            },
+          },
+        ]}
+      >
+        {createIncident => (
+          <React.Fragment>
+            {creating && (
+              <MapCreateIncidentViewer
+                currentPosition={currentPosition}
+                currentRange={currentRange}
+                loggedInUser={loggedInUser}
+                finishCreation={async input => {
+                  await createIncident({ variables: { input } });
+                  setCreating(false);
+                }}
+                resetPosition={() => mapRef.current.panTo(devicePosition)}
+              />
+            )}
+            {!creating && (
+              <MapActionsViewer
+                currentPosition={currentPosition}
+                currentRange={currentRange}
+                loggedInUser={loggedInUser}
+                startCreation={() => setCreating(true)}
+                resetPosition={() => mapRef.current.panTo(devicePosition)}
+              />
+            )}
+          </React.Fragment>
+        )}
+      </Mutation>
     </GoogleMap>
   );
 };

@@ -14,6 +14,7 @@ export const nearbyIncidents = `query NearbyIncidents(
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -37,6 +38,7 @@ export const getIncident = `query GetIncident($id: ID!) {
       lon
     }
     incidentType
+    incidentCriticality
     incidentStatuses {
       items {
         id
@@ -44,6 +46,7 @@ export const getIncident = `query GetIncident($id: ID!) {
         incident {
           id
           incidentType
+          incidentCriticality
           reporter
         }
         reporter
@@ -67,6 +70,7 @@ export const listIncidents = `query ListIncidents(
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -92,6 +96,7 @@ export const getIncidentStatus = `query GetIncidentStatus($id: ID!) {
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -122,6 +127,7 @@ export const listIncidentStatuss = `query ListIncidentStatuss(
           lon
         }
         incidentType
+        incidentCriticality
         incidentStatuses {
           nextToken
         }
@@ -152,6 +158,7 @@ export const searchIncidents = `query SearchIncidents(
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -188,6 +195,7 @@ export const searchIncidentStatuss = `query SearchIncidentStatuss(
           lon
         }
         incidentType
+        incidentCriticality
         incidentStatuses {
           nextToken
         }

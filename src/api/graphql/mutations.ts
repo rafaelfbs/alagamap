@@ -9,6 +9,7 @@ export const createIncident = `mutation CreateIncident($input: CreateIncidentInp
       lon
     }
     incidentType
+    incidentCriticality
     incidentStatuses {
       items {
         id
@@ -16,6 +17,7 @@ export const createIncident = `mutation CreateIncident($input: CreateIncidentInp
         incident {
           id
           incidentType
+          incidentCriticality
           reporter
         }
         reporter
@@ -34,6 +36,7 @@ export const updateIncident = `mutation UpdateIncident($input: UpdateIncidentInp
       lon
     }
     incidentType
+    incidentCriticality
     incidentStatuses {
       items {
         id
@@ -41,6 +44,7 @@ export const updateIncident = `mutation UpdateIncident($input: UpdateIncidentInp
         incident {
           id
           incidentType
+          incidentCriticality
           reporter
         }
         reporter
@@ -59,6 +63,7 @@ export const deleteIncident = `mutation DeleteIncident($input: DeleteIncidentInp
       lon
     }
     incidentType
+    incidentCriticality
     incidentStatuses {
       items {
         id
@@ -66,6 +71,7 @@ export const deleteIncident = `mutation DeleteIncident($input: DeleteIncidentInp
         incident {
           id
           incidentType
+          incidentCriticality
           reporter
         }
         reporter
@@ -87,6 +93,7 @@ export const createIncidentStatus = `mutation CreateIncidentStatus($input: Creat
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -112,6 +119,7 @@ export const updateIncidentStatus = `mutation UpdateIncidentStatus($input: Updat
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -137,6 +145,7 @@ export const deleteIncidentStatus = `mutation DeleteIncidentStatus($input: Delet
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id

@@ -9,6 +9,7 @@ export const onCreateIncident = `subscription OnCreateIncident {
       lon
     }
     incidentType
+    incidentCriticality
     incidentStatuses {
       items {
         id
@@ -16,6 +17,7 @@ export const onCreateIncident = `subscription OnCreateIncident {
         incident {
           id
           incidentType
+          incidentCriticality
           reporter
         }
         reporter
@@ -34,6 +36,7 @@ export const onUpdateIncident = `subscription OnUpdateIncident {
       lon
     }
     incidentType
+    incidentCriticality
     incidentStatuses {
       items {
         id
@@ -41,6 +44,7 @@ export const onUpdateIncident = `subscription OnUpdateIncident {
         incident {
           id
           incidentType
+          incidentCriticality
           reporter
         }
         reporter
@@ -59,6 +63,7 @@ export const onDeleteIncident = `subscription OnDeleteIncident {
       lon
     }
     incidentType
+    incidentCriticality
     incidentStatuses {
       items {
         id
@@ -66,6 +71,7 @@ export const onDeleteIncident = `subscription OnDeleteIncident {
         incident {
           id
           incidentType
+          incidentCriticality
           reporter
         }
         reporter
@@ -87,6 +93,7 @@ export const onCreateIncidentStatus = `subscription OnCreateIncidentStatus {
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -112,6 +119,7 @@ export const onUpdateIncidentStatus = `subscription OnUpdateIncidentStatus {
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id
@@ -137,6 +145,7 @@ export const onDeleteIncidentStatus = `subscription OnDeleteIncidentStatus {
         lon
       }
       incidentType
+      incidentCriticality
       incidentStatuses {
         items {
           id

@@ -16,6 +16,12 @@ enum IncidentType
   FLOOD
 }
 
+enum IncidentCriticality {
+  SLIGHT
+  MODERATE
+  SERIOUS
+}
+
 type Incident
   @model
   @searchable
@@ -23,6 +29,7 @@ type Incident
   id: ID!
   location: Location!
   incidentType: IncidentType!
+  incidentCriticality: IncidentCriticality!
   incidentStatuses: [IncidentStatus] @connection(name: "IncidentStatuses")
   reporter: String
 }

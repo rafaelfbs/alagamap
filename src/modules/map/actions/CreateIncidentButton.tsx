@@ -31,8 +31,8 @@ const styles = theme =>
 
 export interface CreateIncidentButtonProps extends WithStyles<typeof styles> {
   creating: boolean;
-  startCreation: () => void;
-  finishCreation: () => void;
+  startCreation?: () => void;
+  finishCreation?: () => void;
 }
 
 const CreateIncidentButtonBase = ({

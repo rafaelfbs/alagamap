@@ -1,5 +1,5 @@
 ## Query.nearbyIncidents.req.vtl
-## Objects of type Todo will be stored in the /incident index
+## Objects of type Incident will be stored in the /incident index
 
 #set( $indexPath = "/incident/doc/_search" )
 #set( $distance = $util.defaultIfNull($ctx.args.km, 200) )
@@ -16,7 +16,7 @@
           "must": {
             "range": {
               "createdAt": {
-                "gte": "2019-04-30T01:16:05"
+                "gte": "$createdAt"
               }
             }
           },

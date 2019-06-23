@@ -5,6 +5,7 @@ export type CreateIncidentInput = {
   id?: string | null,
   location: LocationInput,
   incidentType: IncidentType,
+  incidentCriticality: IncidentCriticality,
   reporter?: string | null,
 };
 
@@ -18,6 +19,13 @@ export enum IncidentType {
 }
 
 
+export enum IncidentCriticality {
+  SLIGHT = "SLIGHT",
+  MODERATE = "MODERATE",
+  SERIOUS = "SERIOUS",
+}
+
+
 export enum IncidentStatusType {
   APPROVE = "APPROVE",
   DISAPPROVE = "DISAPPROVE",
@@ -28,6 +36,7 @@ export type UpdateIncidentInput = {
   id: string,
   location?: LocationInput | null,
   incidentType?: IncidentType | null,
+  incidentCriticality?: IncidentCriticality | null,
   reporter?: string | null,
 };
 
@@ -56,6 +65,7 @@ export type DeleteIncidentStatusInput = {
 export type ModelIncidentFilterInput = {
   id?: ModelIDFilterInput | null,
   incidentType?: ModelIncidentTypeFilterInput | null,
+  incidentCriticality?: ModelIncidentCriticalityFilterInput | null,
   reporter?: ModelStringFilterInput | null,
   and?: Array< ModelIncidentFilterInput | null > | null,
   or?: Array< ModelIncidentFilterInput | null > | null,
@@ -78,6 +88,11 @@ export type ModelIDFilterInput = {
 export type ModelIncidentTypeFilterInput = {
   eq?: IncidentType | null,
   ne?: IncidentType | null,
+};
+
+export type ModelIncidentCriticalityFilterInput = {
+  eq?: IncidentCriticality | null,
+  ne?: IncidentCriticality | null,
 };
 
 export type ModelStringFilterInput = {
@@ -189,6 +204,7 @@ export type CreateIncidentMutation = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentCriticality: IncidentCriticality,
     incidentStatuses:  {
       __typename: "ModelIncidentStatusConnection",
       items:  Array< {
@@ -199,6 +215,7 @@ export type CreateIncidentMutation = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          incidentCriticality: IncidentCriticality,
           reporter: string | null,
         },
         reporter: string | null,
@@ -223,6 +240,7 @@ export type UpdateIncidentMutation = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentCriticality: IncidentCriticality,
     incidentStatuses:  {
       __typename: "ModelIncidentStatusConnection",
       items:  Array< {
@@ -233,6 +251,7 @@ export type UpdateIncidentMutation = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          incidentCriticality: IncidentCriticality,
           reporter: string | null,
         },
         reporter: string | null,
@@ -257,6 +276,7 @@ export type DeleteIncidentMutation = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentCriticality: IncidentCriticality,
     incidentStatuses:  {
       __typename: "ModelIncidentStatusConnection",
       items:  Array< {
@@ -267,6 +287,7 @@ export type DeleteIncidentMutation = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          incidentCriticality: IncidentCriticality,
           reporter: string | null,
         },
         reporter: string | null,
@@ -295,6 +316,7 @@ export type CreateIncidentStatusMutation = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -329,6 +351,7 @@ export type UpdateIncidentStatusMutation = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -363,6 +386,7 @@ export type DeleteIncidentStatusMutation = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -397,6 +421,7 @@ export type NearbyIncidentsQuery = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -428,6 +453,7 @@ export type GetIncidentQuery = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentCriticality: IncidentCriticality,
     incidentStatuses:  {
       __typename: "ModelIncidentStatusConnection",
       items:  Array< {
@@ -438,6 +464,7 @@ export type GetIncidentQuery = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          incidentCriticality: IncidentCriticality,
           reporter: string | null,
         },
         reporter: string | null,
@@ -466,6 +493,7 @@ export type ListIncidentsQuery = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -500,6 +528,7 @@ export type GetIncidentStatusQuery = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -538,6 +567,7 @@ export type ListIncidentStatussQuery = {
           lon: number,
         },
         incidentType: IncidentType,
+        incidentCriticality: IncidentCriticality,
         incidentStatuses:  {
           __typename: "ModelIncidentStatusConnection",
           nextToken: string | null,
@@ -569,6 +599,7 @@ export type SearchIncidentsQuery = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -608,6 +639,7 @@ export type SearchIncidentStatussQuery = {
           lon: number,
         },
         incidentType: IncidentType,
+        incidentCriticality: IncidentCriticality,
         incidentStatuses:  {
           __typename: "ModelIncidentStatusConnection",
           nextToken: string | null,
@@ -630,6 +662,7 @@ export type OnCreateIncidentSubscription = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentCriticality: IncidentCriticality,
     incidentStatuses:  {
       __typename: "ModelIncidentStatusConnection",
       items:  Array< {
@@ -640,6 +673,7 @@ export type OnCreateIncidentSubscription = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          incidentCriticality: IncidentCriticality,
           reporter: string | null,
         },
         reporter: string | null,
@@ -660,6 +694,7 @@ export type OnUpdateIncidentSubscription = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentCriticality: IncidentCriticality,
     incidentStatuses:  {
       __typename: "ModelIncidentStatusConnection",
       items:  Array< {
@@ -670,6 +705,7 @@ export type OnUpdateIncidentSubscription = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          incidentCriticality: IncidentCriticality,
           reporter: string | null,
         },
         reporter: string | null,
@@ -690,6 +726,7 @@ export type OnDeleteIncidentSubscription = {
       lon: number,
     },
     incidentType: IncidentType,
+    incidentCriticality: IncidentCriticality,
     incidentStatuses:  {
       __typename: "ModelIncidentStatusConnection",
       items:  Array< {
@@ -700,6 +737,7 @@ export type OnDeleteIncidentSubscription = {
           __typename: "Incident",
           id: string,
           incidentType: IncidentType,
+          incidentCriticality: IncidentCriticality,
           reporter: string | null,
         },
         reporter: string | null,
@@ -724,6 +762,7 @@ export type OnCreateIncidentStatusSubscription = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -754,6 +793,7 @@ export type OnUpdateIncidentStatusSubscription = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {
@@ -784,6 +824,7 @@ export type OnDeleteIncidentStatusSubscription = {
         lon: number,
       },
       incidentType: IncidentType,
+      incidentCriticality: IncidentCriticality,
       incidentStatuses:  {
         __typename: "ModelIncidentStatusConnection",
         items:  Array< {

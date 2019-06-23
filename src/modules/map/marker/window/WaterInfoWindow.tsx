@@ -2,7 +2,7 @@ import * as React from "react";
 import { ApproveIncidentButton } from "../actions/ApproveIncidentButton";
 import { Incident } from "../../../shared/types";
 import { DisapproveIncidentButton } from "../actions/DisapproveIncidentButton";
-import { IncidentStatusType } from "../../../../api";
+import { IncidentStatusType, IncidentCriticality } from "../../../../api";
 
 export interface WaterInfoWindowProps {
   incident: Incident;
@@ -18,9 +18,22 @@ const userIsIncidentReporterOrAlreadySetStatus = (incident, reporter, statusType
   userIsIncidentReporter(incident, reporter) ||
   userAlreadySetStatus(incident, reporter, statusType);
 
+const getIncidentCriticality = incident => {
+  switch (incident.incidentCriticality) {
+    case IncidentCriticality.SLIGHT:
+      return "Leve";
+    case IncidentCriticality.MODERATE:
+      return "Moderado";
+    case IncidentCriticality.SERIOUS:
+      return "Grave";
+    default:
+      return "Leve";
+  }
+};
+
 const WaterInfoWindow = ({ incident, loggedInUser }: WaterInfoWindowProps) => (
   <div>
-    <h3>Ponto de Alagamento</h3>
+    <h3>Ponto de Alagamento {getIncidentCriticality(incident)}</h3>
     <div>
       <ApproveIncidentButton
         incident={incident}

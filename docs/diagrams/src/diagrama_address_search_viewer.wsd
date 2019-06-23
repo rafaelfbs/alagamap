@@ -1,0 +1,274 @@
+@startuml diagrama_address_search_viewer
+
+' class RootComponentBase << (C,blue) component >> {
+'     ==state==
+'     ==props==
+' }
+
+' class ApolloProvider << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # client: ApolloClient
+' }
+
+' class Rehydrated << (C,blue) component >> {
+'     ==state==
+'     ==props==
+' }
+
+' class Query << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # query: GraphQLDocument
+'     # variables: Object
+'     # pollInterval: number
+' }
+
+' class Mutation << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # mutation: GraphQLDocument
+'     # refetchQueries: Function
+' }
+
+' class CssBaseline << (C,blue) component >> {
+'     ==state==
+'     ==props==
+' }
+
+' class Authenticator << (C,blue) component >> {
+'     ==state==
+'     ==props==
+' }
+
+' class App << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # authState: AmplifyAuthState
+'     # authData: AmplifyAuthData
+' }
+
+' class MapManager << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # loggedInUser: string
+' }
+
+' class Map << (C,blue) component >> {
+'     ==state==
+'     # creating: boolean
+'     # selectedMarker: number
+'     # queryVars: Object
+'     ==props==
+'     # loggedInUser: string
+'     # googleMapURL: string
+'     # loadingElement: HTMLElement
+'     # containerElement: HTMLElement
+'     # mapElement: HTMLElement
+' }
+
+' class GoogleMap << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # defaultZoom: number
+'     # defaultCenter: LatLng
+'     # defaultOptions: GoogleMapsOptions
+'     # onClick: Function
+'     # onCenterChanged: Function
+' }
+
+class MapAddressSearchViewer << (C,blue) component >> {
+    ==state==
+    # searchTerm: string
+    ==props==
+    # setSelectedSearchLocation: Function
+}
+
+' class MapListIncidentMarkersViewer << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # incidents: Array<Incident>
+'     # currentPosition: LatLng
+'     # currentRange: number
+'     # loggedInUser: string
+'     # selectedMarker: number
+'     # setSelectedMarker: Function
+' }
+
+' class MapCreateIncidentViewer << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # currentPosition: LatLng
+'     # currentRange: number
+'     # loggedInUser: string
+'     # finishCreation: Function
+'     # resetPosition: Function
+' }
+
+' class MapActionsViewer << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # currentPosition: LatLng
+'     # currentRange: number
+'     # loggedInUser: string
+'     # startCreation: Function
+'     # resetPosition: Function
+' }
+
+class MapAddressSearch << (C,blue) component >> {
+    ==state==
+    ==props==
+    # searchTerm: string
+    # setSearchTerm: Function
+    # setSelectedSearchLocation: Function
+}
+
+class PlacesAutocomplete << (C,blue) component >> {
+    ==state==
+    ==props==
+    # value: string
+    # onChange: Function
+    # onSelect: Function
+}
+
+class MapAddressSearchAutocomplete << (C,blue) component >> {
+    ==state==
+    ==props==
+    # suggestions: Array<AutocompleteSuggestion>
+    # loading: boolean
+    # searchTerm: string
+    # setSearchTerm: Function
+    # setSelectedSearchLocation: Function
+}
+
+class Select << (C,blue) component >> {
+    ==state==
+    ==props==
+    # options: Array<Object>
+    # isLoading: boolean
+    # inputValue: string
+    # onInputChange: Function
+    # onChange: Function
+    # loadingMessage: Function
+    # noOptionsMessage: Function
+    # placeholder: string
+    # components: Object
+    # getOptionLabel: Function
+    # getOptionValue: Function
+}
+
+' class MarkerClusterer << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # averageCenter: boolean
+'     # enableRetinaIcons: boolean
+'     # defaultMaxZoom: number
+'     # defaultGridSize: number
+'     # defaultMinimumClusterSize: number
+'     # gridSize: number
+'     # maxZoom: number
+' }
+
+' class WaterMarker << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # incident: Incident
+'     # position: LatLng
+'     # animation: string
+'     # loggedInUser: string
+'     # isSelected: boolean
+'     # onSelect: Function
+'     # onClose: Function
+' }
+
+' class Marker << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # position: LatLng
+'     # icon: string
+'     # defaultAnimation: string
+'     # onClick: Function
+' }
+
+' class InfoWindow << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # onCloseClick: Function
+' }
+
+' class WaterInfoWindow << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # incident: Incident
+'     # loggedInUser: string
+' }
+
+' class ApproveIncidentButton << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # incident: Incident
+'     # loggedInUser: string
+'     # readOnly: boolean
+' }
+
+' class DisapproveIncidentButton << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # incident: Incident
+'     # loggedInUser: string
+'     # readOnly: boolean
+' }
+
+' class CreateIncidentButton << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # creating: boolean
+'     # startCreation: Function
+'     # finishCreation: Function
+' }
+
+' class ResetPositionButton << (C,blue) component >> {
+'     ==state==
+'     ==props==
+'     # resetPosition: Function
+' }
+
+' RootComponentBase *-- ApolloProvider
+' RootComponentBase *-- Rehydrated
+' RootComponentBase *-- CssBaseline
+' RootComponentBase *-- Authenticator
+' RootComponentBase *-- App
+
+' App *-- MapManager
+
+' MapManager *-- Map
+
+' Map *-- GoogleMap
+' Map *-- Query
+' Map *-- Mutation
+' Map *-- MapAddressSearchViewer
+' Map *-- MapListIncidentMarkersViewer
+' Map *-- MapCreateIncidentViewer
+' Map *-- MapActionsViewer
+
+MapAddressSearchViewer *-- MapAddressSearch
+MapAddressSearch *-- PlacesAutocomplete
+MapAddressSearch *-- MapAddressSearchAutocomplete
+MapAddressSearchAutocomplete *-- Select
+
+' MapListIncidentMarkersViewer *-- MarkerClusterer
+' MapListIncidentMarkersViewer *-- WaterMarker
+
+' WaterMarker *-- Marker
+' WaterMarker *-- InfoWindow
+' WaterMarker *-- WaterInfoWindow
+
+' WaterInfoWindow *-- ApproveIncidentButton
+' WaterInfoWindow *-- DisapproveIncidentButton
+
+' MapCreateIncidentViewer *-- WaterMarker
+
+' MapActionsViewer *-- CreateIncidentButton
+' MapActionsViewer *-- ResetPositionButton
+
+@enduml
