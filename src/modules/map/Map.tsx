@@ -84,7 +84,7 @@ const Map = ({ loggedInUser }: MapProps) => {
           km: currentRange,
           createdAt: yesterday,
         }}
-        pollInterval={10000}
+        pollInterval={1000}
       >
         {({ data }) => (
           <MapListIncidentMarkersViewer
