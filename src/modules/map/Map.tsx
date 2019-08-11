@@ -12,6 +12,9 @@ import { useGeoLoc } from "../../hooks/geo-loc";
 import { toLoc } from "../shared/converters";
 import throttle from "lodash/throttle";
 
+// eslint-disable-next-line
+declare var OneSignal: any;
+
 const DEFAULT_MAP_OPTIONS = {
   zoomControl: false,
   mapTypeControl: false,
@@ -58,6 +61,16 @@ const Map = ({ loggedInUser }: MapProps) => {
   const currentPosition = queryVars.center || devicePosition;
   const currentRange = queryVars.range;
   const yesterday = [new Date()].map(d => (d.setDate(d.getDate() - 1), d))[0].toISOString();
+
+  React.useEffect(() => {
+    OneSignal.push(function() {
+      OneSignal.sendTags({
+        userId: loggedInUser,
+        latitude: currentPosition && currentPosition.lat,
+        longitude: currentPosition && currentPosition.lng,
+      });
+    });
+  }, [loggedInUser, currentPosition]);
 
   return (
     <GoogleMap
